@@ -94,7 +94,6 @@ A list of commonly used resources that I find helpful are listed in the acknowle
 ### Built With
 
 This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [ReactJS](https://reactjs.org/)
 * [Leaflet](https://jquery.com)
 * [Flask](https://flask.palletsprojects.com/en/2.0.x/)
 * [SQLAlchemy](https://www.sqlalchemy.org/)
