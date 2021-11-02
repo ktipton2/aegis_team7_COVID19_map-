@@ -31,12 +31,12 @@
 	</head>
 	<body>
 
-<div>{{data}}</div>
 <div id='map'></div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 <script type="text/javascript" src="{{ url_for('static', filename='us-states.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='us-counties.js') }}"></script>
 
 <script type="text/javascript">
 	var state
@@ -82,10 +82,11 @@
 							'#FFEDA0';
 	}
 
+
 	function style(feature) {
 		return {
-			weight: 2,
 			opacity: 1,
+			weight: 2,
 			color: 'white',
 			dashArray: '3',
 			fillOpacity: 0.7,
@@ -118,29 +119,72 @@
 	}
 
 	function zoomToFeature(e) {
-		map.fitBounds(e.target.getBounds());
-		$.ajax({
-		  url: '/',
-		  data: {state: 'h'}
-		  success : ///$('#current_round').load(document.URL + ' #current_round');
-		});
+		map.fitBounds(e.target.getBounds());	
 	}
 
+	function update(s_feature){
+		$.ajax({
+			url: '/geojson-features',
+			data: {state: s_feature.id},
+			success : function(result){
+				console.log(s_feature.id);
+				geojson2 = L.geoJson(countiesData, {
+					filter: function(feature, layer) {
+						if (feature.properties.STATE == s_feature.id){return true}
+						else {return false};
+					},
+					style: style,
+				}).addTo(map);
+				console.log(geojson2);
+			}
+		});
+	}
 
 	function onEachFeature(feature, layer) {
 		layer.on({
-			mouseover: highlightFeature,
-			mouseout: resetHighlight,
-			click: zoomToFeature
+			//mouseover: highlightFeature,
+			//mouseout: resetHighlight,
+			click: function(){update(feature); showLayers(); map.removeLayer(geojson2); map.removeLayer(layer); }
+			//click: layer.setStyle({fillColor :'blue'})
 		});
 	}
 
+	function hideLayers (){
+	  this.layer.eachLayer(function(layer){
+		if(layer.feature.id == '24'){
+		  map.removeLayer(layer);
+		}
+	  });
+	}
+
+	function showLayers (){
+		geojson.eachLayer(function(layer){
+			map.addLayer(layer);
+		});
+	}
+ 
 
 	geojson = L.geoJson(statesData, {
+		/*filter: function(feature, layer) {
+			if (feature.id == '24' ){return false}
+			else {return true};
+		},*/
 		style: style,
 		onEachFeature: onEachFeature
 	}).addTo(map);
 
+	//console.log(geojson);
+	
+	var geojson2;
+	/*geojson2 = L.geoJson(countiesData, {
+		filter: function(feature, layer) {
+			if (feature.properties.STATE == '24' ){return true}
+			else {return false};
+		},
+		style: style,
+	}).addTo(map);
+	*/
+	
 	map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
 
 

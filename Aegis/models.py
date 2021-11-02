@@ -1,11 +1,12 @@
 from Aegis import db
 
-class State(db.Model):
-	state_id = db.Column(db.Integer, primary_key=True)
-	json = db.Column(db.Text)
+##class State(db.Model):
+#	state_id = db.Column(db.Integer, primary_key=True)
+#	json = db.Column(db.Text)
 
 class County(db.Model):
 	fips = db.Column(db.Integer, primary_key=True)
+	state = db.Column(db.Integer)
 	json = db.Column(db.Text)
 	
 class Vaccination(db.Model):

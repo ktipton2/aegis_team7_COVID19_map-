@@ -1,7 +1,7 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, jsonify
 from sqlalchemy.exc import IntegrityError
 from Aegis import app, db
-from Aegis.models import State
+from Aegis.models import County
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
@@ -9,9 +9,9 @@ def main():
 	if request.method == 'GET':
 		data = request.args.get('state')
 		print(data)
-	return render_template('Choropleth Tutorial - Leaflet.html', title='Individual Assignment', data=data)
+	return render_template('Choropleth Tutorial - Leaflet.html', title='Individual Assignment')
 	
-#@app.route('/<_data>', methods=['GET', 'POST'])
-#def data(_data):
-#		print(_data)
-#helpers
+@app.route('/geojson-features', methods=['GET'])
+def get_all_points():
+    a = request.args.get('state')
+    return jsonify(a)
