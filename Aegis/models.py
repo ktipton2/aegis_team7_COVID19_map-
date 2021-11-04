@@ -12,12 +12,12 @@ class County(db.Model):
 class Vaccination(db.Model):
 	fips = db.Column(db.String(5), db.ForeignKey('county.fips'), primary_key=True)
 	state = db.Column(db.String(2))
-	date = db.Column(db.Date, primary_key=True)
+	date = db.Column(db.String(10), primary_key=True)
 	full_vax = db.Column(db.Integer)
 
 class Infected(db.Model):
 	fips = db.Column(db.String(5), db.ForeignKey('county.fips'), primary_key=True)
 	state = db.Column(db.String(2))
-	date = db.Column(db.Date, primary_key=True)
+	date = db.Column(db.String(10), primary_key=True)
 	cases = db.Column(db.Integer)
 	deaths = db.Column(db.Integer)

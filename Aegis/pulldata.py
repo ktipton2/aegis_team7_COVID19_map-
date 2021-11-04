@@ -1,32 +1,34 @@
-#CDC
+import requests
+import json 
 
-#!/usr/bin/env python
+# NY Times Data URLs
+counties_url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
 
-# make sure to install these packages before running:
-# pip install pandas
-# pip install sodapy
+# CDC API .json
+cdc_url = 'https://data.cdc.gov/resource/8xkx-amqh.json'
 
-import pandas as pd
-from sodapy import Socrata
+# list of csv
+list_NYT = requests.get(counties_url).text.split('\n')
 
-# Unauthenticated client only works with public data sets. Note 'None'
-# in place of application token, and no username or password:
-client = Socrata("data.cdc.gov", None)
+# dict json.
+json_CDC = requests.get(cdc_url).json()
 
-# Example authenticated client (needed for non-public datasets):
-# client = Socrata(data.cdc.gov,
-#                  MyAppToken,
-#                  userame="user@example.com",
-#                  password="AFakePassword")
+print(json_CDC[-1]['date'][0:10])
 
-# First 2000 results, returned as JSON from API / converted to Python list of
-# dictionaries by sodapy.
-results = client.get("8xkx-amqh", limit=2000)
+#date,county,state,fips,cases,deaths
+print(list_NYT[-1].split(','))
+	
+#new_vax = Vaccination(fips='00000', state='48', date=date.fromisoformat('2019-12-04'), full_vax=5)
+#new_county = County 
+#new_infected = Infected
 
-# Convert to pandas DataFrame
-results_df = pd.DataFrame.from_records(results)
+#create the user for the db
+#db.session.add(vax) #stage the user for the db
+#db.session.commit() #commit new user to db
+#print(resp_NYT)
+#print(type(resp_NYT.text))
+#print(type(resp_NYT.content))
 
-#----------------------------------------------------------------------------------------------------------------------------------
-#NYT
-
-url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+#print(resp_CDC)
+#print(type(resp_CDC.text))
+#print(type(resp_CDC.content))

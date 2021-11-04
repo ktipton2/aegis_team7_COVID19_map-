@@ -6,7 +6,7 @@ from datetime import date
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
-	data = "hello"
+	data = "state"
 	if request.method == 'GET':
 		data = request.args.get('state')
 		print(data)
@@ -27,6 +27,9 @@ def get_all_points():
 #	date = db.Column(db.Date, primary_key=True)
 #	full_vax = db.Column(db.Integer)
 
+print("hello");
+#db.drop_all()
+#db.session.commit()
 #db.create_all()
 
 #vax = Vaccination(fips='00000', state='48', date=date.fromisoformat('2019-12-04'), full_vax=5) #create the user for the db
