@@ -18,6 +18,11 @@ print(json_CDC[-1]['date'][0:10])
 #date,county,state,fips,cases,deaths
 print(list_NYT[-1].split(','))
 	
+for item in json_CDC[:-10:-1]:
+		print(item['date'][0:10])
+
+for item in list_NYT[:-10:-1]:
+		print(item.split(','))
 #new_vax = Vaccination(fips='00000', state='48', date=date.fromisoformat('2019-12-04'), full_vax=5)
 #new_county = County 
 #new_infected = Infected
