@@ -1,7 +1,11 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from sqlalchemy.exc import IntegrityError
 from Aegis import app, db
-from Aegis.models import Vaccination, County, Infected, State
+from Aegis.models import Vaccination, County, Infected, State, County_exists, Vaccination_exists, Infected_exists
+from datetime import date
+
+import requests
+import json 
 from datetime import date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -20,19 +24,40 @@ def get_all_points():
 	for row in data:
 		result += row.fips
 	return jsonify(result)
+	
+#DATABASE -----------------------------------------------------------------------------------------------
 
-   
-   
-#fips = db.Column(db.Integer, db.ForeignKey('County.fips'), #primary_key=True,)
-#	date = db.Column(db.Date, primary_key=True)
-#	full_vax = db.Column(db.Integer)
+def reset_db():
+	db.drop_all()
+	db.session.commit()
+	db.create_all()
 
-print("hello");
-#db.drop_all()
-#db.session.commit()
-#db.create_all()
-
-#vax = Vaccination(fips='00000', state='48', date=date.fromisoformat('2019-12-04'), full_vax=5) #create the user for the db
-#db.session.add(vax) #stage the user for the db
-#db.session.commit() #commit new user to db
+def pulldata():
+	# NY Times Data URLs
+	counties_url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+	# CDC API .json
+	cdc_url = 'https://data.cdc.gov/resource/8xkx-amqh.json'
+	# list of csv
+	list_NYT = requests.get(counties_url).text.split('\n')
+	# dict json.
+	json_CDC = requests.get(cdc_url).json()
+	
+	for item in list_NYT[:-2:-1]:
+		row = item.split(',')
+		row[0] = date.fromisoformat(row[0])
+		# county
+		if not County_exists(row[3]):
+			new_county = County(fips=row[3], state=row[3][0:2], name=row[1])
+			db.session.add(new_county)
+			db.session.commit()
+			
+		if not Infected_exists(row[3], row[0]):
+			new_infected = Infected(fips=row[3], state=row[3][0:2], date=row[0], cases=int(row[4]), deaths=int(row[5]))
+			db.session.add(new_infected)
+			db.session.commit()
+		
+		
+print("Running routes.py\n");
+#pulldata()
+#reset_db()
 

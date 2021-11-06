@@ -1,6 +1,6 @@
 import requests
 import json 
-
+from datetime import date, datetime
 # NY Times Data URLs
 counties_url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
 
@@ -19,26 +19,44 @@ json_CDC = requests.get(cdc_url).json()
 #print(list_NYT[-1].split(','))
 	
 #3283 counties?
-for item in json_CDC[:-10:-1]:
-	if item['fips'] != "UNK":
-		print([item['date'][0:10], item['fips'], item['series_complete_yes'] ])
-		#new_vax = Vaccination(fips=item['fips'], state=item['fips'][0:2], date=item['date'][0:10], full_vax=item['series_complete_yes'], percentage=item['series_complete_pop_pct'])
+
+print("date,county,state,fips,cases,deaths")
+for item in list_NYT[:-2:-1]:
+	row = item.split(',')
+	row[0] = date.fromisoformat(row[0])
+	# county
+	if not County_exists(row[3]):
+		new_county = County(fips=row[3], state=row[3][0:2], name=row[1])
+		db.session.add(new_county)
+		db.session.commit()
+		
+	if not Infected_exists(row[3], row[0]):
+		new_infected = Infected(fips=row[3], state=row[3][0:2], date=row[0], cases=int(row[4]), deaths=int(row[5]))
+		db.session.add(new_county)
+		db.session.commit(new_infected)
+	
+
+
+#for item in json_CDC[:-10:-1]:
+#	if item['fips'] != "UNK":
+#		print([date.fromisoformat(item['date'][0:10]), item['fips'], item['series_complete_yes'] ])
+#		#new_vax = Vaccination(fips=item['fips'], state=item['fips'][0:2], date=item['date'][0:10], full_vax=item['series_complete_yes'], percentage=item['series_complete_pop_pct'])
 		#print(item['date'][0:10])
 		#print(item['fips'])
 		#print(item['series_complete_yes'])
 
-for item in list_NYT[:-10:-1]:
-		print(item.split(','))
+#for item in list_NYT[:-10:-1]:
+#		print(item.split(','))
 
 
-ROC = ((Q['series_complete_yes'] /  Q2['series_complete_yes']) -1) * 100
+#ROC = ((Q['series_complete_yes'] /  Q2['series_complete_yes']) -1) * 100
 
-X per time scale.
-per day, per week.
+#X per time scale.
+#per day, per week.
 
-rate = Q['series_complete_yes'] -  Q2['series_complete_yes']) / days
+#rate = Q['series_complete_yes'] -  Q2['series_complete_yes']) / days
 
-new cases per timefram
+#new cases per timefram
 #def get_or_create(cls, name):
 #    exists = db.session.query(Employee.id).filter_by(name=name).scalar() is not None
 #    if exists:
