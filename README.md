@@ -6,4 +6,10 @@ in the root folder (the one this file is in) run: py -m venv venv
 
 to activate your venv: venv\Scripts\activate
 
-make sure to pip install: flask, and flask-sqlalchemy 
+make sure to pip install: 
+
+flask
+flask-sqlalchemy 
+requests
+
+####
