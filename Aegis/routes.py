@@ -23,7 +23,8 @@ def fe_request_by_state():
 	result = ""
 	for row in data:
 		result += row.fips
-	return jsonify(result)
+		
+	return jsonify({"data" : result})
 	
 #DATABASE -----------------------------------------------------------------------------------------------
 

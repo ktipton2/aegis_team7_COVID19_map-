@@ -31,6 +31,9 @@
 	</head>
 	<body>
 
+
+<div>Date Picker from bootstrap? </div>
+
 <div id='map'></div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -128,7 +131,7 @@
 			data: {state: s_feature.id},
 			success : function(result){
 				console.log(s_feature.id);
-				console.log(result);
+				console.log(result.data);
 				geojson2 = L.geoJson(countiesData, {
 					filter: function(feature, layer) {
 						if (feature.properties.STATE == s_feature.id){return true}
@@ -163,7 +166,6 @@
 		});
 	}
  
-
 	geojson = L.geoJson(statesData, {
 		/*filter: function(feature, layer) {
 			if (feature.id == '24' ){return false}
