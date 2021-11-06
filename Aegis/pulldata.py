@@ -21,19 +21,14 @@ json_CDC = requests.get(cdc_url).json()
 #3283 counties?
 
 print("date,county,state,fips,cases,deaths")
-for item in list_NYT[:-2:-1]:
+count = 0;
+for item in list_NYT[::-1]:
 	row = item.split(',')
-	row[0] = date.fromisoformat(row[0])
-	# county
-	if not County_exists(row[3]):
-		new_county = County(fips=row[3], state=row[3][0:2], name=row[1])
-		db.session.add(new_county)
-		db.session.commit()
+	count += 1
+	if(row[0][:4] != '2021'):
+		break;
 		
-	if not Infected_exists(row[3], row[0]):
-		new_infected = Infected(fips=row[3], state=row[3][0:2], date=row[0], cases=int(row[4]), deaths=int(row[5]))
-		db.session.add(new_county)
-		db.session.commit(new_infected)
+print(count)
 	
 
 
