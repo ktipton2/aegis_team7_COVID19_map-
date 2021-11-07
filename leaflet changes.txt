@@ -1,0 +1,13 @@
+6:
+changed title to COVID-19 Vaccination and Infection Map
+
+67-69:
+info.update = function (props) {
+		this._div.innerHTML = (props ?
+			'<b>' + props.name + '</b><br />' : 'Hover over an area');
+	};
+139: added a line after this
+onEachfeature: onEachFeature
+
+148-149:
+uncommented mouseover and mouseout
