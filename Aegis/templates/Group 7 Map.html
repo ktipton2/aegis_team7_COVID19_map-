@@ -103,7 +103,7 @@
 
 		layer.setStyle({
 			weight: 5,
-			color: '#666',
+			//color: '#666',
 			dashArray: '',
 			fillOpacity: 0.7
 		});
@@ -140,8 +140,8 @@
 			data: {state: s_feature.id},
 			success : function(result){
 				data = result.data
-				console.log(s_feature.id);
-				console.log(result.data);
+				//console.log(s_feature.id);
+				//console.log(result.data);
 				geojson2 = L.geoJson(countiesData, {
 					filter: function(feature, layer) {
 						if (feature.properties.STATE == s_feature.id){return true}
@@ -173,7 +173,7 @@
 			mouseover: highlightFeature,
 			mouseout: resetHighlight,
 			contextmenu: zoomFromFeature,
-			click: function(event){update(feature); zoomToFeature(event); showLayers(); map.removeLayer(geojson2); map.removeLayer(layer); }
+			click: function(event){resetHighlight(event); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(geojson2); map.removeLayer(layer); }
 			//click: layer.setStyle({fillColor :'blue'})
 		});
 	}
@@ -200,21 +200,8 @@
 		style: {fillColor :'blue'},
 		onEachFeature: onEachFeature
 	}).addTo(map);
-
-	//console.log(geojson);
-	
-	var geojson2;
-	/*geojson2 = L.geoJson(countiesData, {
-		filter: function(feature, layer) {
-			if (feature.properties.STATE == '24' ){return true}
-			else {return false};
-		},
-		style: style,
-	}).addTo(map);
-	*/
 	
 	map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
-
 
 	var legend = L.control({position: 'bottomright'});
 
