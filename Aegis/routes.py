@@ -9,7 +9,7 @@ import json
 from datetime import date
 
 end_date =  date.fromisoformat('2021-11-04')
-start_date = end_date + timedelta(days=1)
+start_date = end_date - timedelta(days=1)
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
@@ -19,12 +19,18 @@ def main():
 @app.route('/geojson-features', methods=['GET'])
 def fe_request_by_state():
 	a = request.args.get('state')
-	data = Vaccination.query.filter_by(state=a).all()
+	Q1 = Vaccination.query.filter_by(state=a, date=end_date).all()
+	Q2 = Vaccination.query.filter_by(state=a, date=start_date).all()
+	dict = {}
 	result = ""
-	for row in data:
-		result += row.fips
+	for row in Q1:
+		dict[row.fips] = row.full_vax
 		
-	return jsonify({"data" : result})
+	for row in Q2:
+		if row.fips in dict:
+			dict[row.fips] -= row.full_vax	
+	
+	return jsonify({"data" : dict})
 	
 #DATABASE -----------------------------------------------------------------------------------------------
 
@@ -37,18 +43,26 @@ def pulldata():
 	# NY Times Data URLs
 	counties_url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
 	# CDC API .json
-	cdc_url = 'https://data.cdc.gov/resource/8xkx-amqh.json'
+	cdc_url = 'https://data.cdc.gov/resource/8xkx-amqh.json?$limit=50000'
 	# list of csv
-	list_NYT = requests.get(counties_url).text.split('\n')
+	list_NYT = requests.get(counties_url, headers={"content-type":"text"}).text.split('\n')
 	# dict json.
 	json_CDC = requests.get(cdc_url).json()
 	
-	for item in list_NYT[:-2:-1]:
+	"""
+	for item in list_NYT[-23290::-1]:
 		row = item.split(',')
 		
 		#exit if not 2021
-		if(row[0][:4] != '2021'):
+		if(row[0][:7] != '2021-11' or row[0][:7] != '2021-10-30'):
 			break;
+		
+		if (len(row) != 6):
+			continue;
+		
+		if(row[0] == '' or row[1] == '' or row[2] == '' or row[3] == '' or row[4] == '' or row[5] == ''):
+			continue;
+		
 		
 		row[0] = date.fromisoformat(row[0])
 		# county
@@ -61,22 +75,27 @@ def pulldata():
 			new_infected = Infected(fips=row[3], state=row[3][0:2], date=row[0], cases=int(row[4]), deaths=int(row[5]))
 			db.session.add(new_infected)
 			db.session.commit()
-		
-	for item in json_CDC[:-2:-1]:
-		if(item['date'][0:4] != '2021'):
-			break;
-		
+	"""
+	
+	print(len(json_CDC))
+	for item in json_CDC[::-1]:
+		if(item['date'][:7] != '2021-11'):
+			continue;
+			
 		if County_exists(item['fips']):
-			new_vax = Vaccination(fips=item['fips'], state=item['fips'][0:2], 
-								date=date.fromisoformat(item['date'][0:10]), 
-								full_vax=int(item['series_complete_yes']), 
-								percentage=float(item['series_complete_pop_pct']))
-			db.session.add(new_vax)
-			db.session.commit()
-		
+			if not Vaccination_exists(item['fips'], date.fromisoformat(item['date'][0:10])):
+				new_vax = Vaccination(fips=item['fips'], state=item['fips'][0:2], 
+									date=date.fromisoformat(item['date'][0:10]), 
+									full_vax=int(item['series_complete_yes']), 
+									percentage=float(item['series_complete_pop_pct']))
+				db.session.add(new_vax)
+				db.session.commit()
+	
+	
 print("Running routes.py\n");
 #reset_db()
 #pulldata()
+#print("data pulled");
 
 # days between two date objects
 #delta = d1 - d0

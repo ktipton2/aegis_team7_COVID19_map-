@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html>
 <head>
 	
-	<title>Choropleth Tutorial - Leaflet</title>
+	<title>Group 7 Map</title>
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,23 +25,18 @@
 	</style>
 
 	<style>#map { width: 800px; height: 500px; }
-	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
-	.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }</style>
-	</head>
-	<body>
-
-
-<div>Date Picker from bootstrap? </div>
+.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }</style>
+</head>
+<body>
 
 <div id='map'></div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-<script type="text/javascript" src="{{ url_for('static', filename='us-states.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='us-counties.js') }}"></script>
+<script type="text/javascript" src="us-states.js"></script>
+<script type="text/javascript" src="us-counties.js"></script>
 
 <script type="text/javascript">
-	var state
+
 	var map = L.map('map').setView([37.8, -96], 4);
 
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -65,9 +59,8 @@
 	};
 
 	info.update = function (props) {
-		this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
-			'<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-			: 'Hover over a state');
+		this._div.innerHTML = (props ?
+			'<b>' + props.name + '</b><br />' + props.density + 'people / mi<sup>2</sup>': 'Hover over an area');
 	};
 
 	info.addTo(map);
@@ -77,24 +70,22 @@
 	function getColor(d) {
 		return d > 1000 ? '#800026' :
 				d > 500  ? '#BD0026' :
-				d > 100  ? '#E31A1C' :
-				d > 50  ? '#FC4E2A' :
-				d > 20   ? '#FD8D3C' :
-				d > 10   ? '#FEB24C' :
-				d > 5   ? '#FED976' :
+				d > 200  ? '#E31A1C' :
+				d > 100  ? '#FC4E2A' :
+				d > 50   ? '#FD8D3C' :
+				d > 20   ? '#FEB24C' :
+				d > 10   ? '#FED976' :
 							'#FFEDA0';
 	}
 
-
 	function style(feature) {
-		fips = feature.properties.STATE + feature.properties.COUNTY
 		return {
-			opacity: 1,
 			weight: 2,
+			opacity: 1,
 			color: 'white',
 			dashArray: '3',
 			fillOpacity: 0.7,
-			fillColor: getColor(data[fips])
+			fillColor: getColor(feature.properties.density)
 		};
 	}
 
@@ -123,75 +114,33 @@
 	}
 
 	function zoomToFeature(e) {
-		//console.log("e");
-		map.fitBounds(e.target.getBounds());	
+		map.fitBounds(e.target.getBounds());
+		geojson = L.geoJson(countiesData, {
+			style: style,
+			onEachFeature: onEachFeature
+		}).addTo(map);
 	}
 
-	var data
-
-	function update(s_feature){
-		$.ajax({
-			url: '/geojson-features',
-			data: {state: s_feature.id},
-			success : function(result){
-				data = result.data
-				console.log(s_feature.id);
-				console.log(result.data);
-				geojson2 = L.geoJson(countiesData, {
-					filter: function(feature, layer) {
-						if (feature.properties.STATE == s_feature.id){return true}
-						else {return false};
-					},
-					style: style,
-				}).addTo(map);
-			}
-		});
+	function zoomFromFeature(e) {
+		geojson.remove();
+		map.setZoom(4);
+		map.setView([37.8, -96], 4);
 	}
 
 	function onEachFeature(feature, layer) {
 		layer.on({
-			//mouseover: highlightFeature,
-			//mouseout: resetHighlight,
-			click: function(event){update(feature); zoomToFeature(event); showLayers(); map.removeLayer(geojson2); map.removeLayer(layer); }
-			//click: layer.setStyle({fillColor :'blue'})
+			mouseover: highlightFeature,
+			mouseout: resetHighlight,
+			contextmenu: zoomFromFeature,
+			click: function(event){zoomToFeature(event);}
 		});
 	}
 
-	function hideLayers (){
-	  this.layer.eachLayer(function(layer){
-		if(layer.feature.id == '24'){
-		  map.removeLayer(layer);
-		}
-	  });
-	}
-
-	function showLayers (){
-		geojson.eachLayer(function(layer){
-			map.addLayer(layer);
-		});
-	}
- 
 	geojson = L.geoJson(statesData, {
-		/*filter: function(feature, layer) {
-			if (feature.id == '24' ){return false}
-			else {return true};
-		},*/
-		style: {fillColor :'blue'},
+		style: style,
 		onEachFeature: onEachFeature
 	}).addTo(map);
 
-	//console.log(geojson);
-	
-	var geojson2;
-	/*geojson2 = L.geoJson(countiesData, {
-		filter: function(feature, layer) {
-			if (feature.properties.STATE == '24' ){return true}
-			else {return false};
-		},
-		style: style,
-	}).addTo(map);
-	*/
-	
 	map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
 
 
