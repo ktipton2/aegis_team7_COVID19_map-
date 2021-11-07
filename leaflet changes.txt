@@ -1,13 +1,35 @@
 6:
-changed title to COVID-19 Vaccination and Infection Map
+changed title to COVID-19 Map
 
 67-69:
 info.update = function (props) {
 		this._div.innerHTML = (props ?
 			'<b>' + props.name + '</b><br />' : 'Hover over an area');
 	};
-139: added a line after this
-onEachfeature: onEachFeature
+//takes out all census related data, makes it so it shows state/county and if youre not over one of those spots it just says "hover over an area"
 
-148-149:
+140: added
+onEachfeature: onEachFeature
+//i believe this is why there were problems with highlighting areas in the past 
+
+145-150:
+document.onkeydown = function(evt) {
+    	evt = evt || window.event;
+    	if (evt.keyCode == 27) {
+        	map.setView([37.8, -96], 4);;
+    	}
+};
+//this is to have it zoom back out to the whole map when you press the escape key
+
+154-155:
 uncommented mouseover and mouseout
+//seemed to work fine just by uncommenting it
+
+156: added
+contextmenu: zoomToFeature
+//zooms in on right click (recommend to zoom in first and then click the state otherwise it zooms in on the county)
+
+197:
+map.attributionControl.addAttribution('COVID-19 data &copy; <a href="https://www.cdc.gov">CDC</a> and <a href="https://nytimes.com">NY Times</a>');
+//changes copyright stuff from population/census bureau to the stuff we're using
+
