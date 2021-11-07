@@ -3,7 +3,7 @@
 <html>
 <head>
 	
-	<title>Choropleth Tutorial - Leaflet</title>
+	<title>Group 7 Map</title>
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -127,6 +127,11 @@
 		map.fitBounds(e.target.getBounds());	
 	}
 
+	function zoomFromFeature(e) {
+		map.setZoom(4);
+		map.setView([37.8, -96], 4);
+	}
+
 	var data
 
 	function update(s_feature){
@@ -143,15 +148,31 @@
 						else {return false};
 					},
 					style: style,
+					onEachFeature: onEachFeature2,
+					
 				}).addTo(map);
 			}
 		});
 	}
 
+	function onEachFeature2(feature, layer) {
+		layer.on({
+			mouseover: highlightFeature,
+			mouseout: resetHighlight2,
+			contextmenu: zoomFromFeature,
+		});
+	}
+
+		function resetHighlight2(e) {
+		geojson2.resetStyle(e.target);
+		info.update();
+	}
+
 	function onEachFeature(feature, layer) {
 		layer.on({
-			//mouseover: highlightFeature,
-			//mouseout: resetHighlight,
+			mouseover: highlightFeature,
+			mouseout: resetHighlight,
+			contextmenu: zoomFromFeature,
 			click: function(event){update(feature); zoomToFeature(event); showLayers(); map.removeLayer(geojson2); map.removeLayer(layer); }
 			//click: layer.setStyle({fillColor :'blue'})
 		});

@@ -14,7 +14,7 @@ start_date = end_date - timedelta(days=1)
 @app.route('/', methods=['GET', 'POST'])
 def main():
 	data = "state"
-	return render_template('Choropleth Tutorial - Leaflet.html', title='Individual Assignment')
+	return render_template('GRoup 7 Map.html', title='Individual Assignment')
 	
 @app.route('/geojson-features', methods=['GET'])
 def fe_request_by_state():
