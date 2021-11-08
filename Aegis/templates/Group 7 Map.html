@@ -8,8 +8,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
 	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+   
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+	
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 	
 	<style>
@@ -29,25 +34,39 @@
 </head>
 <body>
 
-<div style="display:inline">Search bar |</div>
-	
-<form action="/">
-	<label for="start">
-		Start date:
-		<input onchange="this.form.submit()" type="date" id="start" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
-	</label>
-</form>
-
-<div class="dropdown">
-	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Dropdown
-	</button>
-	<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-		<button class="dropdown-item" type="button">Action</button>
-		<button class="dropdown-item" type="button">Another action</button>
-		<button class="dropdown-item" type="button">Something else here</button>
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<div style="display:inline">Search bar |</div>
+		</div>
+		<div class="col">
+			<form action="/">
+				<label for="start">
+					Start date:
+					<input onchange="this.form.submit()" type="date" id="start" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
+				</label>
+			</form>
+		</div>
+		<div class="col">
+			<div style="display:inline" class="dropdown">
+				<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+				Dropdown button
+				</button>
+				<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+					<li><a class="dropdown-item" href="#">Action</a></li>
+					<li><a class="dropdown-item" href="#">Another action</a></li>
+					<li><a class="dropdown-item" href="#">Something else here</a></li>
+				</ul>
+			</div>
+		</div>
 	</div>
 </div>
+
+<script>
+
+
+
+</script>
 
 <div id='map'></div>
 
@@ -167,8 +186,7 @@
 				//console.log(result.data);
 				geojson2 = L.geoJson(countiesData, {
 					filter: function(feature, layer) {
-						if (feature.properties.STATE == s_feature.id){return true}
-						else {return false};
+						return feature.properties.STATE == s_feature.id
 					},
 					style: style,
 					onEachFeature: onEachFeature2,

@@ -20,8 +20,14 @@ def main():
 @app.route('/geojson-features', methods=['GET'])
 def fe_request_by_state():
 	state = request.args.get('state')
-	Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
-	Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
+	
+	if table == "Vaccination":	
+		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
+		Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
+	else:
+		Q1 = Infected.query.filter_by(state=state, date=end_date).all()
+		Q2 = Infected.query.filter_by(state=state, date=start_date).all()
+	
 	dict = {}
 	result = ""
 	dict['table'] = table
@@ -51,12 +57,12 @@ def pulldata():
 	# dict json.
 	json_CDC = requests.get(cdc_url).json()
 	
-	"""
+	
 	for item in list_NYT[-23290::-1]:
 		row = item.split(',')
 		
 		#exit if not 2021
-		if(row[0][:7] != '2021-11' or row[0][:7] != '2021-10-30'):
+		if(row[0][:7] != '2021-11'):
 			break;
 		
 		if (len(row) != 6):
@@ -65,21 +71,19 @@ def pulldata():
 		if(row[0] == '' or row[1] == '' or row[2] == '' or row[3] == '' or row[4] == '' or row[5] == ''):
 			continue;
 		
-		
 		row[0] = date.fromisoformat(row[0])
 		# county
 		if not County_exists(row[3]):
 			new_county = County(fips=row[3], state=row[3][0:2], name=row[1])
 			db.session.add(new_county)
-			db.session.commit()
 			
 		if not Infected_exists(row[3], row[0]):
 			new_infected = Infected(fips=row[3], state=row[3][0:2], date=row[0], cases=int(row[4]), deaths=int(row[5]))
 			db.session.add(new_infected)
-			db.session.commit()
-	"""
 	
-	print(len(json_CDC))
+		
+	db.session.commit()
+	
 	for item in json_CDC[::-1]:
 		if(item['date'][:7] != '2021-11'):
 			continue;
@@ -91,7 +95,8 @@ def pulldata():
 									full_vax=int(item['series_complete_yes']), 
 									percentage=float(item['series_complete_pop_pct']))
 				db.session.add(new_vax)
-				db.session.commit()
+	
+	db.session.commit()
 	
 	
 print("Running routes.py\n");
