@@ -28,23 +28,33 @@ def fe_request_by_state():
 	global end_date
 	start_date = end_date - timedelta(days=1)
 	state = request.args.get('state')
-	
-	if table == "Vaccination":	
-		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
-		Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
-	else:
-		Q1 = Infected.query.filter_by(state=state, date=end_date).all()
-		Q2 = Infected.query.filter_by(state=state, date=start_date).all()
+	table = request.args.get('table')
 	
 	dict = {}
 	result = ""
 	dict['table'] = table
-	for row in Q1:
-		dict[row.fips] = row.full_vax
+	
+	if table == "Vaccination":	
+		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
+		Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
 		
-	for row in Q2:
-		if row.fips in dict:
-			dict[row.fips] -= row.full_vax	
+		for row in Q1:
+			dict[row.fips] = row.full_vax
+		
+		for row in Q2:
+			if row.fips in dict:
+				dict[row.fips] -= row.full_vax	
+		
+	else:
+		Q1 = Infected.query.filter_by(state=state, date=end_date).all()
+		Q2 = Infected.query.filter_by(state=state, date=start_date).all()
+	
+		for row in Q1:
+			dict[row.fips] = row.cases
+			
+		for row in Q2:
+			if row.fips in dict:
+				dict[row.fips] -= row.cases	
 	
 	return jsonify({"data" : dict})
 	

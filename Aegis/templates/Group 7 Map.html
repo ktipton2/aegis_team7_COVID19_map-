@@ -48,16 +48,11 @@
 	<nav class="navbar navbar-dark justify-content-between" style="background-color: #e3f2fd;">
 		<a class="navbar-brand">Covid Dashboard</a>
 		<form class="form-inline">
-			<select id="mySelect" class="form-select" onchange="copy();">
+			<select id="mySelect" class="form-select" onchange="setTable();">
 				<option value="Vaccination" >Vaccinations</option>
 				<option value="Infection-Cases" >Infections Cases</option>
 				<option value="Infection-Deaths" >Infection Deaths</option>
 			</select>
-			<script>
-				function copy() {
-					//document.getElementById("label").innerHTML = document.getElementById("mySelect").value
-				}
-			</script>
 		</form>
 		<form class="form-inline">
 		  	<input class="form-control mr-sm-2" type="search" placeholder="Search for County" aria-label="Search">
@@ -78,7 +73,18 @@
 	<script type="text/javascript" src="{{ url_for('static', filename='us-states.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='us-counties.js') }}"></script>
 
+	<!-- main javascript -->
 	<script type="text/javascript">
+		
+		
+		var table = "Vaccination"
+			function setTable() {
+				table = document.getElementById("mySelect").value;
+				if(typeof current_feature !== 'undefined'){
+					update(current_feature);
+				}
+			}
+		
 		var state
 		var map = L.map('map').setView([37.8, -96], 4);
 
@@ -177,11 +183,16 @@
 		}
 
 		var data
-
+		var current_feature
+		
 		function update(s_feature){
+			if(typeof geojson2 !== 'undefined'){
+				map.removeLayer(geojson2)
+			}
+			current_feature = s_feature
 			$.ajax({
 				url: '/geojson-features',
-				data: {state: s_feature.id},
+				data: {state: s_feature.id, table: table},
 				success : function(result){
 					data = result.data
 					//console.log(s_feature.id);
@@ -219,7 +230,7 @@
 				mouseover: highlightFeature,
 				mouseout: resetHighlight,
 				contextmenu: zoomFromFeature,
-				click: function(event){resetHighlight(event); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(geojson2); map.removeLayer(layer); }
+				click: function(event){resetHighlight(event); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer); }
 				//click: layer.setStyle({fillColor :'blue'})
 			});
 		}
