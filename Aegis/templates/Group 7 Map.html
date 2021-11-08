@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,8 +11,7 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-
-
+	
 	<style>
 		html, body {
 			height: 100%;
@@ -28,11 +26,28 @@
 	<style>#map { width: 800px; height: 500px; }
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
 	.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }</style>
-	</head>
-	<body>
+</head>
+<body>
 
+<div style="display:inline">Search bar |</div>
+	
+<form action="/">
+	<label for="start">
+		Start date:
+		<input onchange="this.form.submit()" type="date" id="start" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
+	</label>
+</form>
 
-<div>Date Picker from bootstrap? </div>
+<div class="dropdown">
+	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Dropdown
+	</button>
+	<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+		<button class="dropdown-item" type="button">Action</button>
+		<button class="dropdown-item" type="button">Another action</button>
+		<button class="dropdown-item" type="button">Something else here</button>
+	</div>
+</div>
 
 <div id='map'></div>
 
@@ -68,8 +83,8 @@
 		if(typeof props !== 'undefined'){
 			if (props.hasOwnProperty('STATE')){
 				fips = props.STATE + props.COUNTY
-				this._div.innerHTML = '<h4>Data</h4>' +  (props ?
-				'<b>' + props.name + '</b><br />' + data[fips] + ' people / day'
+				this._div.innerHTML = data['table'] + ' Rate<br />'+  (props ?
+				'<b> ' + props.name + '</b><br />' + data[fips] + ' people / day'
 				: 'Hover over a county');
 			}
 			else{

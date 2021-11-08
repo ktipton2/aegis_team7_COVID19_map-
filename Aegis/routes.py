@@ -10,19 +10,21 @@ from datetime import date
 
 end_date =  date.fromisoformat('2021-11-04')
 start_date = end_date - timedelta(days=1)
+table = "Vaccination"
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
 	data = "state"
-	return render_template('GRoup 7 Map.html', title='Individual Assignment')
+	return render_template('Group 7 Map.html', date=end_date)
 	
 @app.route('/geojson-features', methods=['GET'])
 def fe_request_by_state():
-	a = request.args.get('state')
-	Q1 = Vaccination.query.filter_by(state=a, date=end_date).all()
-	Q2 = Vaccination.query.filter_by(state=a, date=start_date).all()
+	state = request.args.get('state')
+	Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
+	Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
 	dict = {}
 	result = ""
+	dict['table'] = table
 	for row in Q1:
 		dict[row.fips] = row.full_vax
 		
