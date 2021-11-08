@@ -11,6 +11,7 @@ from datetime import date
 end_date =  date.fromisoformat('2021-11-04')
 table = "Vaccination"
 
+# the main page. called whenever the site is visted. 
 @app.route('/', methods=['GET', 'POST'])
 def main():
 	global end_date
@@ -19,6 +20,9 @@ def main():
 	
 	return render_template('Group 7 Map.html', date=end_date)
 	
+# data is sent from the client when they click on a state
+# a query is made
+# data is sent back in json format
 @app.route('/geojson-features', methods=['GET'])
 def fe_request_by_state():
 	global end_date
@@ -45,7 +49,6 @@ def fe_request_by_state():
 	return jsonify({"data" : dict})
 	
 #DATABASE -----------------------------------------------------------------------------------------------
-
 def reset_db():
 	db.drop_all()
 	db.session.commit()
