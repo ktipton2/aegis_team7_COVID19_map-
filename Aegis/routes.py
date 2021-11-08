@@ -9,16 +9,20 @@ import json
 from datetime import date
 
 end_date =  date.fromisoformat('2021-11-04')
-start_date = end_date - timedelta(days=1)
 table = "Vaccination"
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
-	data = "state"
+	global end_date
+	if (request.args.get('chosenDate', type=str)):
+		end_date = date.fromisoformat(request.args.get('chosenDate', type=str))
+	
 	return render_template('Group 7 Map.html', date=end_date)
 	
 @app.route('/geojson-features', methods=['GET'])
 def fe_request_by_state():
+	global end_date
+	start_date = end_date - timedelta(days=1)
 	state = request.args.get('state')
 	
 	if table == "Vaccination":	
