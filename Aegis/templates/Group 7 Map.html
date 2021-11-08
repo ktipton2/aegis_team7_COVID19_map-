@@ -40,7 +40,9 @@
 
 	<style>#map
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
-	.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }</style>
+	.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
+	</style>
+	
 </head>
 <body>
 
@@ -48,21 +50,30 @@
 	<nav class="navbar navbar-dark justify-content-between" style="background-color: #e3f2fd;">
 		<a class="navbar-brand">Covid Dashboard</a>
 		<form class="form-inline">
+		
+			<!-- navbar table select -->
 			<select id="mySelect" class="form-select" onchange="setTable();">
 				<option value="Vaccination" >Vaccinations</option>
 				<option value="Infection-Cases" >Infections Cases</option>
 				<option value="Infection-Deaths" >Infection Deaths</option>
 			</select>
+			
 		</form>
 		<form class="form-inline">
+		
+			<!-- navbar search bar -->
 		  	<input class="form-control mr-sm-2" type="search" placeholder="Search for County" aria-label="Search">
 		  	<button class="btn btn-info my-2 my-sm-0" type="submit">Search</button>
+			
 		</form>
 		<form action="/" class="form-inline">
+		
+			<!-- navbar date select -->
 			<label for="start">
 				Date:&nbsp;
 				<input class="form-control" onchange="this.form.submit()" type="date" id="start" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
 			</label>
+			
 		</form>
 	</nav>
 	
@@ -76,14 +87,16 @@
 	<!-- main javascript -->
 	<script type="text/javascript">
 		
-		
+		// The table to query from
 		var table = "Vaccination"
-			function setTable() {
-				table = document.getElementById("mySelect").value;
-				if(typeof current_feature !== 'undefined'){
-					update(current_feature);
-				}
+		
+		// called from the navbar table select
+		function setTable() {
+			table = document.getElementById("mySelect").value;
+			if(typeof current_feature !== 'undefined'){
+				update(current_feature);
 			}
+		}
 		
 		var state
 		var map = L.map('map').setView([37.8, -96], 4);
@@ -98,7 +111,7 @@
 		}).addTo(map);
 
 
-		// control that shows state info on hover
+		// control that shows info on hover
 		var info = L.control();
 
 		info.onAdd = function (map) {
@@ -111,7 +124,7 @@
 			if(typeof props !== 'undefined'){
 				if (props.hasOwnProperty('STATE')){
 					fips = props.STATE + props.COUNTY
-					this._div.innerHTML = data['table'] + ' Rate<br />'+  (props ?
+					this._div.innerHTML = table + ' Rate<br />'+  (props ?
 					'<b> ' + props.name + '</b><br />' + data[fips] + ' people / day'
 					: 'Hover over a county');
 				}
@@ -124,7 +137,7 @@
 		info.addTo(map);
 
 
-		// get color depending on population density value
+		// get color depending on county
 		function getColor(d) {
 			return d > 1000 ? '#800026' :
 					d > 500  ? '#BD0026' :
@@ -167,10 +180,27 @@
 			info.update(layer.feature.properties);
 		}
 
+		//state resetHighlight
 		function resetHighlight(e) {
 			geojson.resetStyle(e.target);
 			info.update();
 		}
+
+		//county onEachFeature
+		function onEachFeature2(feature, layer) {
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight2,
+				contextmenu: zoomFromFeature,
+			});
+		}
+
+		//county resetHighlight
+		function resetHighlight2(e) {
+			geojson2.resetStyle(e.target);
+			info.update();
+		}
+
 
 		function zoomToFeature(e) {
 			//console.log("e");
@@ -182,9 +212,16 @@
 			map.setView([37.8, -96], 4);
 		}
 
+
+
+
+		// global for recived back end data
 		var data
+		
+		// the state most recently clicked on. So update can be called from other functions.
 		var current_feature
 		
+		// remove the curret county layers, ask the back end for new data, make a new county layer
 		function update(s_feature){
 			if(typeof geojson2 !== 'undefined'){
 				map.removeLayer(geojson2)
@@ -207,21 +244,6 @@
 					}).addTo(map);
 				}
 			});
-		}
-
-		//county onEachFeature
-		function onEachFeature2(feature, layer) {
-			layer.on({
-				mouseover: highlightFeature,
-				mouseout: resetHighlight2,
-				contextmenu: zoomFromFeature,
-			});
-		}
-
-		//county resetHighlight
-		function resetHighlight2(e) {
-			geojson2.resetStyle(e.target);
-			info.update();
 		}
 
 		//state onEachFeature

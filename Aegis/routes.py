@@ -32,7 +32,7 @@ def fe_request_by_state():
 	
 	dict = {}
 	result = ""
-	dict['table'] = table
+	#dict['table'] = table
 	
 	if table == "Vaccination":	
 		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
@@ -45,7 +45,7 @@ def fe_request_by_state():
 			if row.fips in dict:
 				dict[row.fips] -= row.full_vax	
 		
-	else:
+	elif table == "Infection-Cases":
 		Q1 = Infected.query.filter_by(state=state, date=end_date).all()
 		Q2 = Infected.query.filter_by(state=state, date=start_date).all()
 	
@@ -55,7 +55,17 @@ def fe_request_by_state():
 		for row in Q2:
 			if row.fips in dict:
 				dict[row.fips] -= row.cases	
+	else:
+		Q1 = Infected.query.filter_by(state=state, date=end_date).all()
+		Q2 = Infected.query.filter_by(state=state, date=start_date).all()
 	
+		for row in Q1:
+			dict[row.fips] = row.deaths
+			
+		for row in Q2:
+			if row.fips in dict:
+				dict[row.fips] -= row.deaths	
+				
 	return jsonify({"data" : dict})
 	
 #DATABASE -----------------------------------------------------------------------------------------------
