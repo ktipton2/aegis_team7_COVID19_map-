@@ -65,9 +65,17 @@
 	};
 
 	info.update = function (props) {
-		this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
-			'<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-			: 'Hover over a state');
+		if(typeof props !== 'undefined'){
+			if (props.hasOwnProperty('STATE')){
+				fips = props.STATE + props.COUNTY
+				this._div.innerHTML = '<h4>Data</h4>' +  (props ?
+				'<b>' + props.name + '</b><br />' + data[fips] + ' people / day'
+				: 'Hover over a county');
+			}
+			else{
+				this._div.innerHTML = 'Hover over a county';
+			}
+		}
 	};
 
 	info.addTo(map);
@@ -163,7 +171,7 @@
 		});
 	}
 
-		function resetHighlight2(e) {
+	function resetHighlight2(e) {
 		geojson2.resetStyle(e.target);
 		info.update();
 	}
@@ -193,15 +201,11 @@
 	}
  
 	geojson = L.geoJson(statesData, {
-		/*filter: function(feature, layer) {
-			if (feature.id == '24' ){return false}
-			else {return true};
-		},*/
 		style: {fillColor :'blue'},
 		onEachFeature: onEachFeature
 	}).addTo(map);
 	
-	map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
+	map.attributionControl.addAttribution('COVID-19 data &copy; <a href="https://www.cdc.gov">CDC</a> and <a href="https://nytimes.com">NY Times</a>');
 
 	var legend = L.control({position: 'bottomright'});
 
