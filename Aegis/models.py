@@ -6,7 +6,7 @@ class State(db.Model):
 
 class County(db.Model):
 	fips = db.Column(db.String(5), primary_key=True)
-	state = db.Column(db.Integer)
+	state = db.Column(db.String(2))
 	name = db.Column(db.Text)
 	#json = db.Column(db.Text)
 	

@@ -85,7 +85,7 @@ def pulldata():
 	json_CDC = requests.get(cdc_url).json()
 	
 	
-	for item in list_NYT[-23290::-1]:
+	for item in list_NYT[::-1]:
 		row = item.split(',')
 		
 		#exit if not 2021
@@ -104,13 +104,15 @@ def pulldata():
 			new_county = County(fips=row[3], state=row[3][0:2], name=row[1])
 			db.session.add(new_county)
 			
+		"""
 		if not Infected_exists(row[3], row[0]):
 			new_infected = Infected(fips=row[3], state=row[3][0:2], date=row[0], cases=int(row[4]), deaths=int(row[5]))
 			db.session.add(new_infected)
-	
+		"""
 		
 	db.session.commit()
 	
+	"""
 	for item in json_CDC[::-1]:
 		if(item['date'][:7] != '2021-11'):
 			continue;
@@ -124,7 +126,7 @@ def pulldata():
 				db.session.add(new_vax)
 	
 	db.session.commit()
-	
+	"""
 	
 print("Running routes.py\n");
 #reset_db()

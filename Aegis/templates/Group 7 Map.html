@@ -26,6 +26,10 @@
 	<!-- jquery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
+	<!-- search bar -->
+	<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/css/autoComplete.02.min.css">
+
 	<style>
 		html, body {
 			height: 100%;
@@ -57,13 +61,11 @@
 				<option value="Infection-Cases" >Infections Cases</option>
 				<option value="Infection-Deaths" >Infection Deaths</option>
 			</select>
-			
 		</form>
 		<form class="form-inline">
 		
 			<!-- navbar search bar -->
-		  	<input class="form-control mr-sm-2" type="search" placeholder="Search for County" aria-label="Search">
-		  	<button class="btn btn-info my-2 my-sm-0" type="submit">Search</button>
+			<input autocomplete="off" id="autoComplete">
 			
 		</form>
 		<form action="/" class="form-inline">
@@ -87,7 +89,63 @@
 	<!-- main javascript -->
 	<script type="text/javascript">
 		
+		var countyArray = []
+		var id
+		
+		for (var i = 0; i < countiesData.features.length; i++){
+			text = countiesData.features[i].properties.name;
+			for (var j = 0; j < statesData.features.length; j++){
+				if(statesData.features[j].id == countiesData.features[i].properties.STATE){
+					text += ' ' + statesData.features[j].properties.name;
+					id = statesData.features[j].id
+				}
+			}
+			
+			countyArray.push(text);
+		}
+		
+		//update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer); }
+		
+		const autoCompleteJS = new autoComplete({
+						selector: "#autoComplete",
+						placeHolder: "Search for Food...",
+						data: { 
+							src: countyArray
+						},
+						resultsList: {
+							//element: (list, data) => {console.log(data)}
+						},
+						resultItem: {
+							highlight: {
+								render: true
+							}
+						},
+						events: {
+							input: {
+								selection: (event) => {
+									const selection = event.detail.selection.value;
+									autoCompleteJS.input.value = selection;		
+									geojson.eachLayer(function(layer){
+										if (layer.feature.id == id){
+											map.fitBounds(layer._bounds);
+											update(layer.feature);
+											map.removeLayer(layer);
+										}
+									});	
+								}
+							}
+						}
+					});
+		
+		document.querySelector("#autoComplete").addEventListener("selection", function (event) {
+			// "event.detail" carries the autoComplete.js "feedback" object
+			//console.log(event.detail);
+		});
+
+		
+		
 		// The table to query from
+		// used in the info box, and passed to the back end in update
 		var table = "Vaccination"
 		
 		// called from the navbar table select
@@ -203,7 +261,6 @@
 
 
 		function zoomToFeature(e) {
-			//console.log("e");
 			map.fitBounds(e.target.getBounds());	
 		}
 
@@ -211,9 +268,6 @@
 			map.setZoom(4);
 			map.setView([37.8, -96], 4);
 		}
-
-
-
 
 		// global for recived back end data
 		var data
@@ -252,7 +306,7 @@
 				mouseover: highlightFeature,
 				mouseout: resetHighlight,
 				contextmenu: zoomFromFeature,
-				click: function(event){resetHighlight(event); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer); }
+				click: function(event){resetHighlight(event); console.log(layer); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer); }
 				//click: layer.setStyle({fillColor :'blue'})
 			});
 		}
@@ -263,7 +317,7 @@
 				map.addLayer(layer);
 			});
 		}
-	 
+		
 		//sates
 		geojson = L.geoJson(statesData, {
 			style: {fillColor :'blue'},
