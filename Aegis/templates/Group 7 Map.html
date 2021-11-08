@@ -12,6 +12,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 	<style>
 		html, body {
 			height: 100%;
@@ -23,31 +27,31 @@
 		}
 	</style>
 
-	<style>#map { width: 800px; height: 500px; }
+	<style>#map { width: 1200px; height: 700px; }
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
 	.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }</style>
 </head>
 <body>
 
-<div style="display:inline">Search bar |</div>
+	<nav class="navbar navbar-light justify-content-between" style="background-color: #e3f2fd;">
+		<a class="navbar-brand">Covid Dashboard</a>
+		<form class="form-inline">
+			<button class="btn btn-info" type="button">Vaccination Metrics</button>
+			<button class="btn btn-warning" type="button">Infection Metrics</button>
+		</form>
+		<form class="form-inline">
+		  	<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+		  	<button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+		</form>
+		<form action="/" class="form-inline">
+			<label for="start">
+				Date:&nbsp;
+				<input onchange="this.form.submit()" type="date" id="start" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
+			</label>
+		</form>
+	</nav>
 	
-<form action="/">
-	<label for="start">
-		Date:
-		<input onchange="this.form.submit()" type="date" id="start" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
-	</label>
-</form>
 
-<div class="dropdown">
-	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Dropdown
-	</button>
-	<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-		<button class="dropdown-item" type="button">Action</button>
-		<button class="dropdown-item" type="button">Another action</button>
-		<button class="dropdown-item" type="button">Something else here</button>
-	</div>
-</div>
 
 <div id='map' style="margin:auto"></div>
 
