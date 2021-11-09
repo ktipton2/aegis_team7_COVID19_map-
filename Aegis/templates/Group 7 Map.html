@@ -91,13 +91,12 @@
 		
 		var countyArray = []
 		var id
-		
+					
 		for (var i = 0; i < countiesData.features.length; i++){
 			text = countiesData.features[i].properties.name;
 			for (var j = 0; j < statesData.features.length; j++){
 				if(statesData.features[j].id == countiesData.features[i].properties.STATE){
 					text += ' ' + statesData.features[j].properties.name;
-					id = statesData.features[j].id
 				}
 			}
 			
@@ -124,7 +123,19 @@
 							input: {
 								selection: (event) => {
 									const selection = event.detail.selection.value;
-									autoCompleteJS.input.value = selection;		
+									autoCompleteJS.input.value = selection;	
+									for (var i = 0; i < countiesData.features.length; i++){
+										text = countiesData.features[i].properties.name;
+										for (var j = 0; j < statesData.features.length; j++){
+											if(statesData.features[j].id == countiesData.features[i].properties.STATE){
+												text += ' ' + statesData.features[j].properties.name;
+												if (text == selection){
+													id = statesData.features[j].id
+												}
+											}
+										}
+									}
+									showLayers();
 									geojson.eachLayer(function(layer){
 										if (layer.feature.id == id){
 											map.fitBounds(layer._bounds);
