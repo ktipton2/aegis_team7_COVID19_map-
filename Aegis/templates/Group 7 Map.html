@@ -329,9 +329,11 @@
 			});
 		}
 		
-		//sates
+		//states
 		geojson = L.geoJson(statesData, {
-			style: {fillColor :'blue'},
+			style: {fillColor :'blue'
+				color :'white',
+				weight :1},
 			onEachFeature: onEachFeature
 		}).addTo(map);
 		
