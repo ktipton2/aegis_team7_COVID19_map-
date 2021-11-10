@@ -2,7 +2,7 @@
 <html>
 <head>
 	
-	<title>Group 7 Map</title>
+	<title>COVID-19 Dashboard</title>
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,8 +43,8 @@
 	</style>
 
 	<style>#map
-	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
-	.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
+	.info { padding: 6px 8px; font: 17px/19px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 18px;  color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 3px; opacity: 0.7; clear: both;}
 	</style>
 	
 </head>
@@ -58,7 +58,7 @@
 			<!-- navbar table select -->
 			<select id="mySelect" class="form-select" onchange="setTable();">
 				<option value="Vaccination" >Vaccinations</option>
-				<option value="Infection-Cases" >Infections Cases</option>
+				<option value="Infection-Cases" >Infection Cases</option>
 				<option value="Infection-Deaths" >Infection Deaths</option>
 			</select>
 		</form>
@@ -165,6 +165,7 @@
 			if(typeof current_feature !== 'undefined'){
 				update(current_feature);
 			}
+			legend.addTo(map);
 		}
 		
 		var state
@@ -198,7 +199,7 @@
 					: 'Hover over a county');
 				}
 				else{
-					this._div.innerHTML = 'Hover over a county';
+					this._div.innerHTML = 'Hover over a county (left click to zoom out)';
 				}
 			}
 		};
@@ -208,7 +209,15 @@
 
 		// get color depending on county
 		function getColor(d) {
-			return d > 1000 ? '#800026' :
+			if(table == "Infection-Deaths"){
+				return d > 20  ? '#000000' :
+					d > 15   ? '#252525' :
+					d > 10   ? '#525252' :
+					d > 5   ? '#969696' :
+								'#d9d9d9';
+			}
+			if(table == "Infection-Cases"){
+				return d > 1000 ? '#800026' :
 					d > 500  ? '#BD0026' :
 					d > 100  ? '#E31A1C' :
 					d > 50  ? '#FC4E2A' :
@@ -216,6 +225,16 @@
 					d > 10   ? '#FEB24C' :
 					d > 5   ? '#FED976' :
 								'#FFEDA0';
+			}
+			return d > 1000 ? '#4d004b' :
+					d > 500  ? '#810f7c' :
+					d > 100  ? '#88419d' :
+					d > 50  ? '#8c6bb1' :
+					d > 20   ? '#8c96c6' :
+					d > 10   ? '#9ebcda' :
+					d > 5   ? '#bfd3e6' :
+								'#e0ecf4';
+
 		}
 
 		// style county 
@@ -329,13 +348,9 @@
 			});
 		}
 		
-		//states
+		//sates
 		geojson = L.geoJson(statesData, {
-			style: {fillColor :'blue',
-				opacity: 1,
-				fillOpacity: 0.3,
-				color :'white',
-				weight :1},
+			style: {fillColor :'blue', color:'#cbebfe', weight: 2},
 			onEachFeature: onEachFeature
 		}).addTo(map);
 		
@@ -344,11 +359,19 @@
 		var legend = L.control({position: 'bottomright'});
 
 		legend.onAdd = function (map) {
-
-			var div = L.DomUtil.create('div', 'info legend'),
+			var div;
+			if(table == "Infection-Deaths"){
+				var div = L.DomUtil.create('div', 'info legend'),
+				grades = [0, 5, 10, 15, 20],
+				labels = [],
+				from, to;
+			}
+			else{
+				var div = L.DomUtil.create('div', 'info legend'),
 				grades = [0, 10, 20, 50, 100, 200, 500, 1000],
 				labels = [],
 				from, to;
+			}
 
 			for (var i = 0; i < grades.length; i++) {
 				from = grades[i];
