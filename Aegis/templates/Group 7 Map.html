@@ -7,8 +7,10 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
-	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
-	
+	<!-- umbc logo -->
+	<link rel="icon" type="image/png" sizes="32x32" href="https://styleguide.umbc.edu/wp-content/themes/sights/images/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="https://styleguide.umbc.edu/wp-content/themes/sights/images/favicon-16x16.png">
+  
 	<!-- bootstrap stuff -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
@@ -77,72 +79,93 @@
 			</label>
 			
 		</form>
+		<form class="form-inline">
+		
+			<!-- Update the database -->
+			<!--<button type="button" onclick="updateDatabase()">Update the database</button>-->
+			<script>
+			function updateDatabase(){
+				$.ajax({
+					url: '/update-database',
+					data: {},
+					success: {}
+				});
+			}
+			
+			</script>
+		</form>
 	</nav>
-	
+
 	<!-- The map -->
 	<div id='map' style="margin:auto"></div>
 
 	<!-- import json files as statesData countiesData -->
 	<script type="text/javascript" src="{{ url_for('static', filename='us-states.js') }}"></script>
-	<script type="text/javascript" src="{{ url_for('static', filename='us-counties.js') }}"></script>
-
+	<script type="text/javascript" src="{{ url_for('static', filename='USA_Counties_Reduced_2P.json') }}"></script>
+	
 	<!-- main javascript -->
 	<script type="text/javascript">
-		
-		var countyArray = []
-		var id
-					
-		for (var i = 0; i < countiesData.features.length; i++){
-			text = countiesData.features[i].properties.name;
-			for (var j = 0; j < statesData.features.length; j++){
-				if(statesData.features[j].id == countiesData.features[i].properties.STATE){
-					text += ' ' + statesData.features[j].properties.name;
-				}
-			}
-			
-			countyArray.push(text);
-		}
-		
-		//update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer); }
 		
 		const autoCompleteJS = new autoComplete({
 						selector: "#autoComplete",
 						placeHolder: "Search for Counties",
 						data: { 
-							src: countyArray
+							src : countiesData.features
+						},
+						searchEngine: (query, record) => {
+						
+							query = query.toLowerCase();
+							const text = record.properties.NAME + ' ' + record.properties.STATE_NAME
+							
+							// Strict mode
+							
+							// Get starting index of matching characters
+							let match = text.toLowerCase().indexOf(query);
+							
+							// if match was found
+							if (~match) {
+							  // Extract matching characters from record
+							  query = text.substring(match, match + query.length);
+							 
+							  mark = "<mark>" + query + "</mark>" 
+							  match = text.replace(query, mark);
+
+							  return match;
+							}
+							return false
 						},
 						resultsList: {
-							//element: (list, data) => {console.log(data)}
+							maxResults : 10
 						},
 						resultItem: {
-							highlight: {
-								render: true
+							element: (item, data) => {
+								//console.log(item)
+								//console.log(data)
 							}
 						},
 						events: {
 							input: {
 								selection: (event) => {
-									const selection = event.detail.selection.value;
-									autoCompleteJS.input.value = selection;	
-									for (var i = 0; i < countiesData.features.length; i++){
-										text = countiesData.features[i].properties.name;
-										for (var j = 0; j < statesData.features.length; j++){
-											if(statesData.features[j].id == countiesData.features[i].properties.STATE){
-												text += ' ' + statesData.features[j].properties.name;
-												if (text == selection){
-													id = statesData.features[j].id
-												}
-											}
-										}
-									}
+									const selection = event.detail.selection.value.properties;
+									//console.log(selection)
+									autoCompleteJS.input.value = selection.NAME + 
+									' ' + selection.STATE_NAME;
+									
 									showLayers();
 									geojson.eachLayer(function(layer){
-										if (layer.feature.id == id){
+										if (layer.feature.id == selection.STATE_FIPS){
 											map.fitBounds(layer._bounds);
 											update(layer.feature);
 											map.removeLayer(layer);
 										}
 									});	
+									//console.log(geojson2);
+									geojson2.eachLayer(function(layer){
+										if (layer.feature.properties.FIPS == selection.FIPS){
+											highlightFeature({"target" : layer}); 
+										}
+									});	
+									
 								}
 							}
 						}
@@ -192,10 +215,9 @@
 
 		info.update = function (props) {
 			if(typeof props !== 'undefined'){
-				if (props.hasOwnProperty('STATE')){
-					fips = props.STATE + props.COUNTY
+				if (props.hasOwnProperty('FIPS')){
 					this._div.innerHTML = table + ' Rate<br />'+  (props ?
-					'<b> ' + props.name + '</b><br />' + data[fips] + ' people / day'
+					'<b> ' + props.NAME + '</b><br />' + data[props.FIPS] + ' people / day'
 					: 'Hover over a county');
 				}
 				else{
@@ -239,24 +261,22 @@
 
 		// style county 
 		function style(feature) {
-			fips = feature.properties.STATE + feature.properties.COUNTY
 			return {
 				opacity: 1,
 				weight: 2,
 				color: 'white',
 				dashArray: '3',
 				fillOpacity: 0.7,
-				fillColor: getColor(data[fips])
+				fillColor: getColor(data[feature.properties.FIPS])
 			};
 		}
 
-	
 		function highlightFeature(e) {
 			var layer = e.target;
 
 			layer.setStyle({
 				weight: 5,
-				//color: '#666',
+				color: '#666',
 				dashArray: '',
 				fillOpacity: 0.7
 			});
@@ -289,7 +309,6 @@
 			info.update();
 		}
 
-
 		function zoomToFeature(e) {
 			map.fitBounds(e.target.getBounds());	
 		}
@@ -314,20 +333,22 @@
 			$.ajax({
 				url: '/geojson-features',
 				data: {state: s_feature.id, table: table},
+				async: false,
 				success : function(result){
 					data = result.data
-					//console.log(s_feature.id);
-					//console.log(result.data);
 					geojson2 = L.geoJson(countiesData, {
 						filter: function(feature, layer) {
-							return feature.properties.STATE == s_feature.id
+							return feature.properties.STATE_FIPS == s_feature.id
 						},
 						style: style,
 						onEachFeature: onEachFeature2,
 						
 					}).addTo(map);
+					//return geojson2;
 				}
 			});
+			//console.log(geojson2);
+			//return geojson2
 		}
 
 		//state onEachFeature
@@ -336,7 +357,7 @@
 				mouseover: highlightFeature,
 				mouseout: resetHighlight,
 				contextmenu: zoomFromFeature,
-				click: function(event){resetHighlight(event); console.log(layer); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer); }
+				click: function(event){resetHighlight(event); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer); }
 				//click: layer.setStyle({fillColor :'blue'})
 			});
 		}
@@ -348,7 +369,10 @@
 			});
 		}
 		
-		//sates
+		// counties
+		var geojson2
+		
+		// states
 		geojson = L.geoJson(statesData, {
 			style: {fillColor :'blue', color:'#cbebfe', weight: 2},
 			onEachFeature: onEachFeature
