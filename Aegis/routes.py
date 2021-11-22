@@ -1,12 +1,13 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from sqlalchemy.exc import IntegrityError
 from Aegis import app, db
-from Aegis.models import Vaccination, County, Infected, State, County_exists, Vaccination_exists, Infected_exists
+from Aegis.models import Vaccination, County, Infected, State, County_exists, Vaccination_exists, Infected_exists, State_exists
 from datetime import date, timedelta
 
 import requests
 import json 
-from datetime import date
+
+import time
 
 end_date =  date.fromisoformat('2021-11-04')
 table = "Vaccination"
@@ -69,6 +70,16 @@ def fe_request_by_state():
 	return jsonify({"data" : dict})
 	
 #DATABASE -----------------------------------------------------------------------------------------------
+@app.route('/update-database', methods=['GET'])
+def fe_update_database():
+	print("pulling data")
+	#reset_db()
+	start_time = time.time()
+	pulldata()
+	print("done")
+	print("--- %s seconds ---" % (time.time() - start_time))
+	return jsonify({"data" : True}) 
+
 def reset_db():
 	db.drop_all()
 	db.session.commit()
@@ -84,6 +95,29 @@ def pulldata():
 	# dict json.
 	json_CDC = requests.get(cdc_url).json()
 	
+	#counties data
+	with open('Aegis/static/USA_Counties.geojson') as dataFile:
+		data = dataFile.read()
+		obj = data[data.find('{') : data.rfind('}')+1]
+		countiesData = json.loads(obj)
+	
+	#County.query.delete()
+	#db.session.commit()
+	
+	print("files opened - now inserting")
+	
+	
+	for item in countiesData['features']:
+		if not State_exists(item['properties']['STATE_FIPS']):
+			new_state = State(state=item['properties']['STATE_FIPS'], name=item['properties']['STATE_NAME'], )
+			db.session.add(new_state)
+	
+		if not County_exists(item['properties']['FIPS']):
+			new_county = County(fips=item['properties']['FIPS'], state=item['properties']['STATE_FIPS'], name=item['properties']['NAME'], population=item['properties']['POPULATION'] )
+			db.session.add(new_county)
+	
+	db.session.commit()
+	
 	
 	for item in list_NYT[::-1]:
 		row = item.split(',')
@@ -98,21 +132,14 @@ def pulldata():
 		if(row[0] == '' or row[1] == '' or row[2] == '' or row[3] == '' or row[4] == '' or row[5] == ''):
 			continue;
 		
-		row[0] = date.fromisoformat(row[0])
-		# county
-		if not County_exists(row[3]):
-			new_county = County(fips=row[3], state=row[3][0:2], name=row[1])
-			db.session.add(new_county)
-			
-		"""
+		row[0] = date.fromisoformat(row[0])		
+		
 		if not Infected_exists(row[3], row[0]):
 			new_infected = Infected(fips=row[3], state=row[3][0:2], date=row[0], cases=int(row[4]), deaths=int(row[5]))
 			db.session.add(new_infected)
-		"""
 		
 	db.session.commit()
 	
-	"""
 	for item in json_CDC[::-1]:
 		if(item['date'][:7] != '2021-11'):
 			continue;
@@ -126,7 +153,6 @@ def pulldata():
 				db.session.add(new_vax)
 	
 	db.session.commit()
-	"""
 	
 print("Running routes.py\n");
 #reset_db()

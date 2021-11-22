@@ -1,14 +1,14 @@
 from Aegis import db
 
 class State(db.Model):
-	state_id = db.Column(db.Integer, primary_key=True)
-	#json = db.Column(db.Text)
+	state = db.Column(db.String(2), primary_key=True)
+	name = db.Column(db.Text)
 
 class County(db.Model):
 	fips = db.Column(db.String(5), primary_key=True)
 	state = db.Column(db.String(2))
 	name = db.Column(db.Text)
-	#json = db.Column(db.Text)
+	population = db.Column(db.Integer)
 	
 class Vaccination(db.Model):
 	fips = db.Column(db.String(5), db.ForeignKey('county.fips'), primary_key=True)
@@ -27,6 +27,13 @@ class Infected(db.Model):
 	
 def County_exists(pk):
 	exists = db.session.query(County).filter_by(fips=pk).scalar() is not None
+	if exists:
+		#print("C already in db")
+		return True
+	return False
+	
+def State_exists(pk):
+	exists = db.session.query(State).filter_by(state=pk).scalar() is not None
 	if exists:
 		#print("C already in db")
 		return True
