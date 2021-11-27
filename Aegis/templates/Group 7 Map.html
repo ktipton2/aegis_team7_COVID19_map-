@@ -6,6 +6,7 @@
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 	
 	<!-- umbc logo -->
 	<link rel="icon" type="image/png" sizes="32x32" href="https://styleguide.umbc.edu/wp-content/themes/sights/images/favicon-32x32.png">
@@ -32,17 +33,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/css/autoComplete.02.min.css">
 
-	<style>
-		html, body {
-			height: 100%;
-			margin: 0;
-		}
-		#map {
-			width: 100%;
-			height: 90%;
-			display: flex;
-		}
-	</style>
 
 	<style>#map
 	.info { padding: 6px 8px; font: 17px/19px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
@@ -51,53 +41,88 @@
 	
 </head>
 <body>
-
-	<!-- top of page navbar -->
-	<nav class="navbar navbar-dark justify-content-between" style="background-color: #e3f2fd;">
-		<a class="navbar-brand">Covid Dashboard</a>
-		<form class="form-inline">
-		
-			<!-- navbar table select -->
-			<select id="mySelect" class="form-select" onchange="setTable();">
-				<option value="Vaccination" >Vaccinations</option>
-				<option value="Infection-Cases" >Infection Cases</option>
-				<option value="Infection-Deaths" >Infection Deaths</option>
-			</select>
-		</form>
-		<form class="form-inline">
-		
-			<!-- navbar search bar -->
-			<input autocomplete="off" id="autoComplete">
-			
-		</form>
-		<form action="/" class="form-inline">
-		
-			<!-- navbar date select -->
-			<label for="start">
-				Date:&nbsp;
-				<input class="form-control" onchange="this.form.submit()" type="date" id="start" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
-			</label>
-			
-		</form>
-		<form class="form-inline">
-		
-			<!-- Update the database -->
-			<!--<button type="button" onclick="updateDatabase()">Update the database</button>-->
-			<script>
-			function updateDatabase(){
-				$.ajax({
-					url: '/update-database',
-					data: {},
-					success: {}
-				});
-			}
-			
-			</script>
-		</form>
-	</nav>
-
 	<!-- The map -->
-	<div id='map' style="margin:auto"></div>
+	<div class="container-fluid" style="margin:0; padding:0; width:100%; height:100%; color: #8FABD0 " >
+		<!-- top of page navbar -->
+		<div class="row" style=" display: inline-block; margin:0; padding:.5rem; width:100%; min-height:50px; max-height: 50px; background-color: #27588C; color: white; padding-top:.3rem; ">
+			<header>
+				<nav>
+					<ul class="nav-links" style="float: right; align-items: center; text-align: center; padding-top: .5rem;">
+						<li><a href="#">Contact</a></li>
+					</ul>
+				</nav>
+				<a class="navbar-brand">Covid Dashboard</a>
+			</header>
+		</div>
+		
+		<!-- Main Body -->
+		<div class="row" style="margin:0; padding:0; width:100%; height: 95%;">
+			<!-- Left body-->
+		  	<div class="col"  class="sroll-section" style="margin:0; padding:0;">
+				<div class="row-top">
+					<!-- navbar search bar -->
+					<form class="form-inline">
+						<input autocomplete="off" id="autoComplete">
+					</form>
+					<!-- navbar table select -->
+					<form class="form-inline">
+						<select id="mySelect" class="form-select" onchange="setTable();">
+							<option value="Vaccination" >Vaccinations</option>
+							<option value="Infection-Cases" >Infection Cases</option>
+							<option value="Infection-Deaths" >Infection Deaths</option>
+						</select>
+					</form>
+					<!-- navbar date select -->
+					<form action="/" class="form-inline">
+						<label for="start">
+							Date:&nbsp;
+							<input class="form-control" onchange="this.form.submit()" type="date" id="start" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
+						</label>
+					</form>
+					<!-- Update the database -->
+					<!--<button type="button" onclick="updateDatabase()">Update the database</button>-->
+					<form class="form-inline">
+						<script>
+						function updateDatabase(){
+							$.ajax({
+								url: '/update-database',
+								data: {},
+								success: {}
+							});
+						}
+				
+						</script>
+					</form>
+				</div>
+
+			<div class="row-body">
+				<p>Graph goes here</p>
+			</div>
+
+			<div class="row-footer">
+				<footer class="text-center">
+					<div class="mb-2">
+					 <small>
+						© 2021 made with <i class="fa fa-heart" style="color:red"></i> by - <a target="_blank" rel="noopener noreferrer" href="https://github.com/ktipton2/aegis_team7_COVID19_map-">
+						  CMSC 447 - Team 7
+						</a>
+				  	</small>
+					</div>
+		
+					<div>
+				  	<a href="https://github.com/ktipton2/aegis_team7_COVID19_map-" target="_blank">
+				  	</a>
+					</div>
+			  	</footer>
+			</div>
+
+		  </div>
+		  <div class="col-7" style="margin:0; padding:0;" >
+			<div id='map' style="margin:auto;"></div>
+		  </div>
+		</div>
+
+	</div>
 
 	<!-- import json files as statesData countiesData -->
 	<script type="text/javascript" src="{{ url_for('static', filename='us-states.js') }}"></script>
@@ -301,6 +326,7 @@
 				mouseout: resetHighlight2,
 				contextmenu: zoomFromFeature,
 			});
+			
 		}
 
 		//county resetHighlight
@@ -329,6 +355,7 @@
 			if(typeof geojson2 !== 'undefined'){
 				map.removeLayer(geojson2)
 			}
+
 			current_feature = s_feature
 			$.ajax({
 				url: '/geojson-features',
@@ -360,6 +387,7 @@
 				click: function(event){resetHighlight(event); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer); }
 				//click: layer.setStyle({fillColor :'blue'})
 			});
+			
 		}
 
 		// replace the state that was removed
@@ -411,7 +439,8 @@
 		};
 
 		legend.addTo(map);
-
+		
+		
 	</script>
 </body>
 </html>

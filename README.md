@@ -6,6 +6,8 @@ Ryan Orndoff, Johnathan Brown, Amy Phan
 
 ## About The Project
 
+We have developed a customized web based map dashboard that will show the statistics of COVID-19 infection, vaccination and death rates at a county level in the United States. Our software should show a map that will allow the user to choose a particular county that will show COVID-19 relevant data based on their choice of date, data type.
+
 
 **Languages and Tools:**
 <p> <a href="https://getbootstrap.com" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg" alt="bootstrap" width="40" height="40"/> </a> <a href="https://www.w3schools.com/css/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a> <a href="https://flask.palletsprojects.com/" target="_blank"> <img src="https://www.vectorlogo.zone/logos/pocoo_flask/pocoo_flask-icon.svg" alt="flask" width="40" height="40"/> </a><a href="https://www.mysql.com/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a></p>
@@ -14,10 +16,6 @@ Ryan Orndoff, Johnathan Brown, Amy Phan
 - flask
 - flask-sqlalchemy
 - requests
-
-**Web Functionality Features:**
-
-
 
 **Data Sources**
 
@@ -31,7 +29,11 @@ GitHub repo containing bot information as well as .csv files by state, by county
 
 https://github.com/nytimes/covid-19-data    
 
-## To set up venv
+<u>U.S Census Population</u>
+
+
+
+## To set up the software
 
 **Windows:**
 
@@ -61,8 +63,7 @@ requests
 python --version
 ```
 
-If it lists out a python version less than 3.6+, then check out this page and follow the steps:
-    https://stackoverflow.com/questions/1687357/updating-python-on-mac
+If it lists out a python version less than 3.6+, then check out this [page](https://stackoverflow.com/questions/1687357/updating-python-on-mac) and follow the steps.
 
 
 2. Instal and activate virtualenv to check if you have correctly downloaded it:
@@ -88,5 +89,7 @@ $ flask run
 ```
 5. You should be able to run and open the application now.
 
+## License
+leaflet-sidebar-v2 is free software, and may be redistributed under the MIT license.
 
 ####
