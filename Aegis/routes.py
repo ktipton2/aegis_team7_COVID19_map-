@@ -16,10 +16,14 @@ table = "Vaccination"
 @app.route('/', methods=['GET', 'POST'])
 def main():
 	global end_date
-	if (request.args.get('chosenDate', type=str)):
-		end_date = date.fromisoformat(request.args.get('chosenDate', type=str))
-	
 	return render_template('Group 7 Map.html', date=end_date)
+
+@app.route('/setDate', methods=['GET', 'POST'])
+def setDate():
+	global end_date
+	end_date = date.fromisoformat(request.args.get('chosenDate'))
+
+	return "Date has been changed!"
 	
 # data is sent from the client when they click on a state
 # a query is made

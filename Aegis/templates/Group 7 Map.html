@@ -73,9 +73,9 @@
 		<form action="/" class="form-inline">
 		
 			<!-- navbar date select -->
-			<label for="start">
+			<label for="dateStart">
 				Date:&nbsp;
-				<input class="form-control" onchange="this.form.submit()" type="date" id="start" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
+				<input class="form-control" onchange="setDate()" type="date" id="dateStart" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
 			</label>
 			
 		</form>
@@ -176,7 +176,14 @@
 			//console.log(event.detail);
 		});
 
-		
+		function setDate() {
+			$.ajax({
+				url: '/setDate', 
+				data: {chosenDate: document.getElementById("dateStart").value}, 
+				async: true
+			});
+			update(current_feature);
+		}
 		
 		// The table to query from
 		// used in the info box, and passed to the back end in update
