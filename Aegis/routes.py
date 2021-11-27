@@ -3,25 +3,28 @@ from sqlalchemy.exc import IntegrityError
 from Aegis import app, db
 from Aegis.models import Vaccination, County, Infected, State, County_exists, Vaccination_exists, Infected_exists, State_exists
 from datetime import date, timedelta
-
 import requests
 import json 
-
 import time
 
-end_date =  date.fromisoformat('2021-11-04')
+DEFAULT_DATE_STRING = '2021-11-04'
+
+end_date =  date.fromisoformat(DEFAULT_DATE_STRING)
+start_date = end_date - timedelta(days=1)
 table = "Vaccination"
 
 # the main page. called whenever the site is visted. 
 @app.route('/', methods=['GET', 'POST'])
 def main():
 	global end_date
-	return render_template('Group 7 Map.html', date=end_date)
+	return render_template('Group 7 Map.html', defaultDateStart=start_date, defaultDateEnd=end_date)
 
 @app.route('/setDate', methods=['GET', 'POST'])
 def setDate():
 	global end_date
-	end_date = date.fromisoformat(request.args.get('chosenDate'))
+	global start_date
+	start_date = date.fromisoformat(request.args.get('chosenDateStart'))
+	end_date = date.fromisoformat(request.args.get('chosenDateEnd'))
 
 	return "Date has been changed!"
 	
@@ -31,7 +34,7 @@ def setDate():
 @app.route('/geojson-features', methods=['GET'])
 def fe_request_by_state():
 	global end_date
-	start_date = end_date - timedelta(days=1)
+	global start_date
 	state = request.args.get('state')
 	table = request.args.get('table')
 	
