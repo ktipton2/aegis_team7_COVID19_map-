@@ -74,14 +74,14 @@
 			<!-- navbar date select -->
 			<label for="dateStart">
 				Start Date:&nbsp;
-				<input class="form-control" onchange="setDate()" type="date" id="dateStart" name="chosenDateStart" value="{{defaultDateStart}}" min="2021-11-01" max="2021-11-07">
+				<input class="form-control" onchange="setDate()" type="date" id="dateStart" name="chosenDateStart" value="{{defaultDateStart}}" min="{{minDate}}" max="{{maxDate}}">
 			</label>
 		</form>
 		<form action="/" class="form-inline">
 			<!-- navbar date select -->
 			<label for="dateEnd">
 				End Date:&nbsp;
-				<input class="form-control" onchange="setDate()" type="date" id="dateEnd" name="chosenDateEnd" value="{{defaultDateEnd}}" min="2021-11-01" max="2021-11-07">
+				<input class="form-control" onchange="setDate()" type="date" id="dateEnd" name="chosenDateEnd" value="{{defaultDateEnd}}" min="{{minDate}}" max="{{maxDate}}">
 			</label>
 			
 		</form>
@@ -345,11 +345,14 @@
 			current_feature = s_feature
 			$.ajax({
 				url: '/geojson-features',
+				// send data to back end
 				data: {state: s_feature.id, table: table},
 				async: false,
+				// receive result from back end 
 				success : function(result){
 					data = result.data
 					geojson2 = L.geoJson(countiesData, {
+						// only add state geojson
 						filter: function(feature, layer) {
 							return feature.properties.STATE_FIPS == s_feature.id
 						},
@@ -357,11 +360,8 @@
 						onEachFeature: onEachFeature2,
 						
 					}).addTo(map);
-					//return geojson2;
 				}
 			});
-			//console.log(geojson2);
-			//return geojson2
 		}
 
 		//state onEachFeature
