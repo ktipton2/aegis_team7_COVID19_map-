@@ -39,7 +39,7 @@
 		}
 		#map {
 			width: 100%;
-			height: 90%;
+			height: 94%;
 			display: flex;
 		}
 	</style>
@@ -71,32 +71,25 @@
 			
 		</form>
 		<form action="/" class="form-inline">
-		
 			<!-- navbar date select -->
-			<label for="start">
-				Date:&nbsp;
-				<input class="form-control" onchange="this.form.submit()" type="date" id="start" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
+			<label for="dateStart">
+				Start Date:&nbsp;
+				<input class="form-control" onchange="setDate()" type="date" id="dateStart" name="chosenDateStart" value="{{defaultDateStart}}" min="2021-11-01" max="2021-11-07">
+			</label>
+		</form>
+		<form action="/" class="form-inline">
+			<!-- navbar date select -->
+			<label for="dateEnd">
+				End Date:&nbsp;
+				<input class="form-control" onchange="setDate()" type="date" id="dateEnd" name="chosenDateEnd" value="{{defaultDateEnd}}" min="2021-11-01" max="2021-11-07">
 			</label>
 			
 		</form>
-		
 		<form class="form-inline">
-			<!--hide password-->
-			<input type="text" id="password" placeholder="admin password" />
 		
 			<!-- Update the database -->
-			<button type="button" onclick="updateDatabase()" id="button" disabled="disabled">Update the database</button>
+			<!--<button type="button" onclick="updateDatabase()">Update the database</button>-->
 			<script>
-			$(document).ready(function () {
-				$('#password').on('input change', function () {
-					if ($(this).val() != 'please') {
-						$('#button').prop('disabled', true);
-					}
-					else {
-						$('#button').prop('disabled', false);
-					}
-				});
-			});
 			function updateDatabase(){
 				$.ajax({
 					url: '/update-database',
@@ -107,7 +100,6 @@
 			
 			</script>
 		</form>
-
 	</nav>
 
 	<!-- The map -->
@@ -190,7 +182,14 @@
 			//console.log(event.detail);
 		});
 
-		
+		function setDate() {
+			$.ajax({
+				url: '/setDate', 
+				data: {chosenDateStart: document.getElementById("dateStart").value, chosenDateEnd: document.getElementById("dateEnd").value}, 
+				async: true
+			});
+			update(current_feature);
+		}
 		
 		// The table to query from
 		// used in the info box, and passed to the back end in update
