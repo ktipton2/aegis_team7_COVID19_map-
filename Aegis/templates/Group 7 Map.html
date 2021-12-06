@@ -230,7 +230,7 @@
 			if(typeof props !== 'undefined'){
 				if (props.hasOwnProperty('FIPS')){
 					this._div.innerHTML = table + ' Rate<br />'+  (props ?
-					'<b> ' + props.NAME + '</b><br />' + data[props.FIPS] + ' people / day'
+					'<b> ' + props.NAME + '</b><br />' + GlobalData[props.FIPS] + ' people / day'
 					: 'Hover over a county');
 				}
 				else{
@@ -280,7 +280,7 @@
 				color: 'white',
 				dashArray: '3',
 				fillOpacity: 0.7,
-				fillColor: getColor(data[feature.properties.FIPS])
+				fillColor: getColor(GlobalData[feature.properties.FIPS])
 			};
 		}
 
@@ -332,7 +332,7 @@
 		}
 
 		// global for recived back end data
-		var data
+		var GlobalDataGlobalData
 		
 		// the state most recently clicked on. So update can be called from other functions.
 		var current_feature
@@ -350,7 +350,7 @@
 				async: false,
 				// receive result from back end 
 				success : function(result){
-					data = result.data
+					GlobalData = result.data
 					geojson2 = L.geoJson(countiesData, {
 						// only add state geojson
 						filter: function(feature, layer) {

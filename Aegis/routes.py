@@ -49,23 +49,16 @@ def fe_request_by_state():
 	delta = (end_date - start_date).days
 	
 	dict = {}
+	county_dict = {}
 	result = ""
 	#dict['table'] = table
 
-	
+
+
 	if table == "Vaccination":	
-		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
-		Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
-		
-		qry = (session.query(OpEntry, OpEntryStatus)
-        .join(OpEntryStatus, and_(OpEntry.id == OpEntryStatus.op_id, OpEntryStatus.order_id == 3))
-        .filter(OpEntry.op_artikel_id == 4)
-        .filter(OpEntry.active == 1)
-        .order_by(OpEntry.id)
-        )
-
-
-
+		Q1 = Vaccination.query.filter_by(state=state, date=end_date)
+		Q2 = Vaccination.query.filter_by(state=state, date=start_date)
+			
 		for row in Q1:
 			dict[row.fips] = row.full_vax
 		
@@ -93,7 +86,15 @@ def fe_request_by_state():
 		for row in Q2:
 			if row.fips in dict:
 				dict[row.fips] -= row.deaths	
-				
+			
+		
+	population = County.query.filter_by(state=state);
+	for row in population:
+		county_dict[row.fips] = row.population 
+			
+	for key in dict:
+		dict[key] = (dict[key] / delta) / county_dict[key]
+			
 	return jsonify({"data" : dict})
 	
 #DATABASE -----------------------------------------------------------------------------------------------
