@@ -57,15 +57,6 @@ def fe_request_by_state():
 		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
 		Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
 		
-		qry = (session.query(OpEntry, OpEntryStatus)
-        .join(OpEntryStatus, and_(OpEntry.id == OpEntryStatus.op_id, OpEntryStatus.order_id == 3))
-        .filter(OpEntry.op_artikel_id == 4)
-        .filter(OpEntry.active == 1)
-        .order_by(OpEntry.id)
-        )
-
-
-
 		for row in Q1:
 			dict[row.fips] = row.full_vax
 		
