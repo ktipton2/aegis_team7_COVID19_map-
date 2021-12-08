@@ -112,6 +112,7 @@
 	<!-- main javascript -->
 	<script type="text/javascript">
 		
+		// search bar
 		const autoCompleteJS = new autoComplete({
 						selector: "#autoComplete",
 						placeHolder: "Search for Counties",
@@ -176,11 +177,6 @@
 							}
 						}
 					});
-		
-		document.querySelector("#autoComplete").addEventListener("selection", function (event) {
-			// "event.detail" carries the autoComplete.js "feedback" object
-			//console.log(event.detail);
-		});
 
 		function setDate() {
 			$.ajax({
@@ -191,7 +187,7 @@
 			update(current_feature);
 		}
 		
-		// The table to query from
+		// The default table to query from
 		// used in the info box, and passed to the back end in update
 		var table = "Vaccination"
 		
@@ -204,7 +200,6 @@
 			legend.addTo(map);
 		}
 		
-		var state
 		var map = L.map('map').setView([37.8, -96], 4);
 
 		L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -273,7 +268,7 @@
 		}
 
 		// style county 
-		function style(feature) {
+		function styleCounty(feature) {
 			return {
 				opacity: 1,
 				weight: 2,
@@ -308,7 +303,7 @@
 		}
 
 		//county onEachFeature
-		function onEachFeature2(feature, layer) {
+		function onEachCounty(feature, layer) {
 			layer.on({
 				mouseover: highlightFeature,
 				mouseout: resetHighlight2,
@@ -356,8 +351,8 @@
 						filter: function(feature, layer) {
 							return feature.properties.STATE_FIPS == s_feature.id
 						},
-						style: style,
-						onEachFeature: onEachFeature2,
+						style: styleCounty,
+						onEachFeature: onEachCounty,
 						
 					}).addTo(map);
 				}
@@ -365,7 +360,7 @@
 		}
 
 		//state onEachFeature
-		function onEachFeature(feature, layer) {
+		function onEachState(feature, layer) {
 			layer.on({
 				mouseover: highlightFeature,
 				mouseout: resetHighlight,
@@ -388,7 +383,7 @@
 		// states
 		geojson = L.geoJson(statesData, {
 			style: {fillColor :'blue', color:'#cbebfe', weight: 2},
-			onEachFeature: onEachFeature
+			onEachFeature: onEachState
 		}).addTo(map);
 		
 		map.attributionControl.addAttribution('COVID-19 data &copy; <a href="https://www.cdc.gov">CDC</a> and <a href="https://nytimes.com">NY Times</a>');

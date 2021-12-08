@@ -93,14 +93,14 @@ def fe_request_by_state():
 		county_dict[row.fips] = row.population 
 			
 	for key in dict:
-		dict[key] = (dict[key] / delta) / county_dict[key]
+		dict[key] = (dict[key] / delta) / county_dict[key] * 100000
 			
 	return jsonify({"data" : dict})
 	
 #DATABASE -----------------------------------------------------------------------------------------------
 @app.route('/update-database', methods=['GET'])
 def fe_update_database():
-	print("pulling data")
+	print("pulling data: may take some time")
 	#reset_db()
 	start_time = time.time()
 	pulldata()
