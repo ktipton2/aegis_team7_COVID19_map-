@@ -52,13 +52,11 @@ def fe_request_by_state():
 	county_dict = {}
 	result = ""
 	#dict['table'] = table
-
-
-
+	
 	if table == "Vaccination":	
-		Q1 = Vaccination.query.filter_by(state=state, date=end_date)
-		Q2 = Vaccination.query.filter_by(state=state, date=start_date)
-			
+		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
+		Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
+		
 		for row in Q1:
 			dict[row.fips] = row.full_vax
 		
