@@ -49,9 +49,9 @@ def fe_request_by_state():
 	delta = (end_date - start_date).days
 	
 	dict = {}
+	county_dict = {}
 	result = ""
 	#dict['table'] = table
-
 	
 	if table == "Vaccination":	
 		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
@@ -84,13 +84,21 @@ def fe_request_by_state():
 		for row in Q2:
 			if row.fips in dict:
 				dict[row.fips] -= row.deaths	
-				
+			
+		
+	population = County.query.filter_by(state=state);
+	for row in population:
+		county_dict[row.fips] = row.population 
+			
+	for key in dict:
+		dict[key] = (dict[key] / delta) / county_dict[key] * 100000
+			
 	return jsonify({"data" : dict})
 	
 #DATABASE -----------------------------------------------------------------------------------------------
 @app.route('/update-database', methods=['GET'])
 def fe_update_database():
-	print("pulling data")
+	print("pulling data: may take some time")
 	#reset_db()
 	start_time = time.time()
 	pulldata()
