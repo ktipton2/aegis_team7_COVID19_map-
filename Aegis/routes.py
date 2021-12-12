@@ -96,10 +96,11 @@ def fe_request_by_state():
 	population = County.query.filter_by(state=state).all();
 	for row in population:
 		county_dict[row.fips] = row.population 
-			
+	
+	# Per Capita Calculation by Current Feature
 	for key in dict:
 		try: 
-			dict[key] = (dict[key] / delta) / county_dict[key] * 100000
+			dict[key] = round((dict[key] / delta) / county_dict[key] * 100000, 2)
 		except:
 			# keys not in county_dict
 			print(key)
