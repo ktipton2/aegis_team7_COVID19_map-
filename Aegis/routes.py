@@ -101,17 +101,12 @@ def fe_request_by_state():
 		try: 
 			dict[key] = (dict[key] / delta) / county_dict[key] * 100000
 		except:
-			#missing keys
+			# keys not in county_dict
 			print(key)
 			dict[key] = -1
 		
 	
 	return jsonify({"data" : dict})
-	#02998
-	#02997
-	
-	#02060
-	#02164
 	
 #DATABASE -----------------------------------------------------------------------------------------------
 @app.route('/update-database', methods=['GET'])
