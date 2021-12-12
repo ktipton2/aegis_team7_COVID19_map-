@@ -125,12 +125,21 @@
 		</form>
 		<form class="form-inline">
 		
-					<div>
-				  	<a href="https://github.com/ktipton2/aegis_team7_COVID19_map-" target="_blank">
-				  	</a>
-					</div>
-			  	</footer>
-			</div>
+			<!-- Update the database -->
+			<button type="button" onclick="updateDatabase()">Update the database</button>
+			<script>
+			function updateDatabase(){
+				$.ajax({
+					url: '/update-database',
+					data: {},
+					success: {}
+				});
+			}
+			
+			</script>
+		</form>
+	</nav>
+
 
 	<!-- The map -->
 	<div id='map' class="sidebar-map" style="margin:auto"></div>
