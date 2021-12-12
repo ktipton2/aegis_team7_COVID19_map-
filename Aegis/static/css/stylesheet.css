@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+*{
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.navbar-brand h1{
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 1.2rem;
+    padding-top: .5rem;
+}
+
+#map {
+    width: 100%;
+    height: 94%;
+    display: flex;
+}
+
+/* Drop Down Menu */
+.form-select{
+    background:black;
+}
+
+/* Map */
+#map
+	.info { 
+        padding: 6px 8px; 
+        font: 17px/19px Arial, Helvetica, sans-serif; 
+        background: white; background: rgba(255,255,255,0.8); 
+        box-shadow: 0 0 15px rgba(0,0,0,0.2); 
+        border-radius: 5px; 
+    } 
+    .info h4 { 
+        margin: 0 0 5px; 
+        color: #777; 
+    }
+	.legend { 
+        text-align: left; 
+        line-height: 18px;  
+        color: #555; 
+    } 
+    .legend i { 
+        width: 18px; 
+        height: 18px; 
+        float: left; 
+        margin-right: 3px; 
+        opacity: 0.7; 
+        clear: both;
+    }
+
+
+/* Side bar */
+.lorem {
+    font-style: italic;
+    color: #AAA;
+}
+
+.navbar{
+    background-color:white;
+
+}

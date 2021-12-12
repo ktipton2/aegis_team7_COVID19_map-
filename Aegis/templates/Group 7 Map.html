@@ -5,9 +5,14 @@
 	<title>COVID-19 Dashboard</title>
 
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	
+	<!-- CSS Files -->
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/leaflet-sidebar.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
+
 	<!-- umbc logo -->
 	<link rel="icon" type="image/png" sizes="32x32" href="https://styleguide.umbc.edu/wp-content/themes/sights/images/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="https://styleguide.umbc.edu/wp-content/themes/sights/images/favicon-16x16.png">
@@ -32,82 +37,93 @@
 	<!-- search bar -->
 	<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/autoComplete.min.js"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.6/dist/css/autoComplete.02.min.css">
-
-
-	<style>#map
-	.info { padding: 6px 8px; font: 17px/19px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
-	.legend { text-align: left; line-height: 18px;  color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 3px; opacity: 0.7; clear: both;}
-	</style>
 	
 </head>
 <body>
-	<!-- The map -->
-	<div class="container-fluid" style="margin:0; padding:0; width:100%; height:100%; color: #8FABD0 " >
-		<!-- top of page navbar -->
-		<div class="row" style=" display: inline-block; margin:0; padding:.5rem; width:100%; min-height:50px; max-height: 50px; background-color: #27588C; color: white; padding-top:.3rem; ">
-			<header>
-				<nav>
-					<ul class="nav-links" style="float: right; align-items: center; text-align: center; padding-top: .5rem;">
-						<li><a href="#">Contact</a></li>
-					</ul>
-				</nav>
-				<a class="navbar-brand">Covid Dashboard</a>
-			</header>
-		</div>
+	<!-- Side bar -->
+	<div id="sidebar" class="sidebar collapsed">
+        <!-- Nav tabs -->
+        <div class="sidebar-tabs">
+            <ul role="tablist">
+				<li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+				<li><a href="#profile" role="tab"><i class="fa fa-info"></i></a></li>
+                <li><a href="https://covid19.umbc.edu/contact-us/" role="tab"><i class="fa fa-envelope"></i></a></li>
+                <li><a href="https://github.com/ktipton2/aegis_team7_COVID19_map-" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
+				<li class="disabled"><a href="#messages" role="tab"><i class="fa fa-envelope"></i></a></li>
+			</ul>
+
+            <ul role="tablist">
+                <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+            </ul>
+        </div>
+
+        <!-- Tab panes -->
+        <div class="sidebar-content">
+            <div class="sidebar-pane" id="home">
+                <h1 class="sidebar-header">
+                    COVID-19 Statistics
+                    <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                </h1>
+
+                <p>COVID-19 Map Dashboard by Team 7.</p>
+
+                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            </div>
+
+            <div class="sidebar-pane" id="profile">
+                <h1 class="sidebar-header">Profile<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+            </div>
+
+            <div class="sidebar-pane" id="messages">
+                <h1 class="sidebar-header">Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+            </div>
+
+            <div class="sidebar-pane" id="settings">
+                <h1 class="sidebar-header">Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+            </div>
+        </div>
+    </div>
+	
+	<!-- The Navbar -->
+	<nav class="navbar navbar-dark justify-content-between" style="background-color: white;">
+		<a class="navbar-brand"><h1 class="header1">Covid Dashboard</h1></a>
+		<form class="form-inline">
 		
-		<!-- Main Body -->
-		<div class="row" style="margin:0; padding:0; width:100%; height: 95%;">
-			<!-- Left body-->
-		  	<div class="col"  class="sroll-section" style="margin:0; padding:0;">
-				<div class="row-top">
-					<!-- navbar search bar -->
-					<form class="form-inline">
-						<input autocomplete="off" id="autoComplete">
-					</form>
-					<!-- navbar table select -->
-					<form class="form-inline">
-						<select id="mySelect" class="form-select" onchange="setTable();">
-							<option value="Vaccination" >Vaccinations</option>
-							<option value="Infection-Cases" >Infection Cases</option>
-							<option value="Infection-Deaths" >Infection Deaths</option>
-						</select>
-					</form>
-					<!-- navbar date select -->
-					<form action="/" class="form-inline">
-						<label for="start">
-							Date:&nbsp;
-							<input class="form-control" onchange="this.form.submit()" type="date" id="start" name="chosenDate" value="{{date}}" min="2021-11-01" max="2021-11-07">
-						</label>
-					</form>
-					<!-- Update the database -->
-					<!--<button type="button" onclick="updateDatabase()">Update the database</button>-->
-					<form class="form-inline">
-						<script>
-						function updateDatabase(){
-							$.ajax({
-								url: '/update-database',
-								data: {},
-								success: {}
-							});
-						}
-				
-						</script>
-					</form>
-				</div>
-
-			<div class="row-body">
-				<p>Graph goes here</p>
-			</div>
-
-			<div class="row-footer">
-				<footer class="text-center">
-					<div class="mb-2">
-					 <small>
-						© 2021 made with <i class="fa fa-heart" style="color:red"></i> by - <a target="_blank" rel="noopener noreferrer" href="https://github.com/ktipton2/aegis_team7_COVID19_map-">
-						  CMSC 447 - Team 7
-						</a>
-				  	</small>
-					</div>
+			<!-- navbar table select -->
+			<select id="mySelect" class="form-select" onchange="setTable();">
+				<option value="Vaccination" >Vaccinations</option>
+				<option value="Infection-Cases" >Infection Cases</option>
+				<option value="Infection-Deaths" >Infection Deaths</option>
+			</select>
+		</form>
+		<form class="form-inline">
+		
+			<!-- navbar search bar -->
+			<input autocomplete="off" id="autoComplete">
+			
+		</form>
+		<form action="/" class="form-inline">
+			<!-- navbar date select -->
+			<label for="dateStart">
+				Start Date:&nbsp;
+				<input class="form-control" onchange="setDate()" type="date" id="dateStart" name="chosenDateStart" value="{{defaultDateStart}}" min="{{minDate}}" max="{{maxDate}}">
+			</label>
+		</form>
+		<form action="/" class="form-inline">
+			<!-- navbar date select -->
+			<label for="dateEnd">
+				End Date:&nbsp;
+				<input class="form-control" onchange="setDate()" type="date" id="dateEnd" name="chosenDateEnd" value="{{defaultDateEnd}}" min="{{minDate}}" max="{{maxDate}}">
+			</label>
+			
+		</form>
+		<form class="form-inline">
 		
 					<div>
 				  	<a href="https://github.com/ktipton2/aegis_team7_COVID19_map-" target="_blank">
@@ -116,21 +132,21 @@
 			  	</footer>
 			</div>
 
-		  </div>
-		  <div class="col-7" style="margin:0; padding:0;" >
-			<div id='map' style="margin:auto;"></div>
-		  </div>
-		</div>
-
-	</div>
+	<!-- The map -->
+	<div id='map' class="sidebar-map" style="margin:auto"></div>
 
 	<!-- import json files as statesData countiesData -->
 	<script type="text/javascript" src="{{ url_for('static', filename='us-states.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='USA_Counties_Reduced_2P.json') }}"></script>
-	
+
+	<!-- import JS files for side bar -->
+	<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='leaflet-sidebar.js') }}"></script>
+
 	<!-- main javascript -->
 	<script type="text/javascript">
 		
+		// search bar
 		const autoCompleteJS = new autoComplete({
 						selector: "#autoComplete",
 						placeHolder: "Search for Counties",
@@ -159,6 +175,7 @@
 							}
 							return false
 						},
+						//show 10 search options to user
 						resultsList: {
 							maxResults : 10
 						},
@@ -195,15 +212,17 @@
 							}
 						}
 					});
-		
-		document.querySelector("#autoComplete").addEventListener("selection", function (event) {
-			// "event.detail" carries the autoComplete.js "feedback" object
-			//console.log(event.detail);
-		});
 
+		function setDate() {
+			$.ajax({
+				url: '/setDate', 
+				data: {chosenDateStart: document.getElementById("dateStart").value, chosenDateEnd: document.getElementById("dateEnd").value}, 
+				async: true
+			});
+			update(current_feature);
+		}
 		
-		
-		// The table to query from
+		// The default table to query from
 		// used in the info box, and passed to the back end in update
 		var table = "Vaccination"
 		
@@ -216,7 +235,6 @@
 			legend.addTo(map);
 		}
 		
-		var state
 		var map = L.map('map').setView([37.8, -96], 4);
 
 		L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -242,7 +260,7 @@
 			if(typeof props !== 'undefined'){
 				if (props.hasOwnProperty('FIPS')){
 					this._div.innerHTML = table + ' Rate<br />'+  (props ?
-					'<b> ' + props.NAME + '</b><br />' + data[props.FIPS] + ' people / day'
+					'<b> ' + props.NAME + '</b><br />' + GlobalData[props.FIPS] + ' people / day'
 					: 'Hover over a county');
 				}
 				else{
@@ -285,14 +303,14 @@
 		}
 
 		// style county 
-		function style(feature) {
+		function styleCounty(feature) {
 			return {
 				opacity: 1,
 				weight: 2,
 				color: 'white',
 				dashArray: '3',
 				fillOpacity: 0.7,
-				fillColor: getColor(data[feature.properties.FIPS])
+				fillColor: getColor(GlobalData[feature.properties.FIPS])
 			};
 		}
 
@@ -320,7 +338,7 @@
 		}
 
 		//county onEachFeature
-		function onEachFeature2(feature, layer) {
+		function onEachCounty(feature, layer) {
 			layer.on({
 				mouseover: highlightFeature,
 				mouseout: resetHighlight2,
@@ -345,7 +363,7 @@
 		}
 
 		// global for recived back end data
-		var data
+		var GlobalData
 		
 		// the state most recently clicked on. So update can be called from other functions.
 		var current_feature
@@ -359,27 +377,27 @@
 			current_feature = s_feature
 			$.ajax({
 				url: '/geojson-features',
+				// send data to back end
 				data: {state: s_feature.id, table: table},
 				async: false,
+				// receive result from back end 
 				success : function(result){
-					data = result.data
+					GlobalData = result.data
 					geojson2 = L.geoJson(countiesData, {
+						// only add state geojson
 						filter: function(feature, layer) {
 							return feature.properties.STATE_FIPS == s_feature.id
 						},
-						style: style,
-						onEachFeature: onEachFeature2,
+						style: styleCounty,
+						onEachFeature: onEachCounty,
 						
 					}).addTo(map);
-					//return geojson2;
 				}
 			});
-			//console.log(geojson2);
-			//return geojson2
 		}
 
 		//state onEachFeature
-		function onEachFeature(feature, layer) {
+		function onEachState(feature, layer) {
 			layer.on({
 				mouseover: highlightFeature,
 				mouseout: resetHighlight,
@@ -403,7 +421,7 @@
 		// states
 		geojson = L.geoJson(statesData, {
 			style: {fillColor :'blue', color:'#cbebfe', weight: 2},
-			onEachFeature: onEachFeature
+			onEachFeature: onEachState
 		}).addTo(map);
 		
 		map.attributionControl.addAttribution('COVID-19 data &copy; <a href="https://www.cdc.gov">CDC</a> and <a href="https://nytimes.com">NY Times</a>');
@@ -439,8 +457,9 @@
 		};
 
 		legend.addTo(map);
-		
-		
+
+		var sidebar = L.control.sidebar('sidebar').addTo(map);
 	</script>
+
 </body>
 </html>

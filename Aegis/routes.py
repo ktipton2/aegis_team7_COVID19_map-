@@ -1,25 +1,40 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify
+from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from Aegis import app, db
 from Aegis.models import Vaccination, County, Infected, State, County_exists, Vaccination_exists, Infected_exists, State_exists
 from datetime import date, timedelta
-
 import requests
 import json 
-
 import time
 
-end_date =  date.fromisoformat('2021-11-04')
+DEFAULT_DATE_STRING = '2021-11-04'
+
+end_date =  date.fromisoformat(DEFAULT_DATE_STRING)
+start_date = end_date - timedelta(days=1)
 table = "Vaccination"
 
 # the main page. called whenever the site is visted. 
 @app.route('/', methods=['GET', 'POST'])
 def main():
 	global end_date
-	if (request.args.get('chosenDate', type=str)):
-		end_date = date.fromisoformat(request.args.get('chosenDate', type=str))
 	
-	return render_template('Group 7 Map.html', date=end_date)
+	maxDate = db.session.query(func.max(Vaccination.date)).first()
+	minDate = db.session.query(func.min(Vaccination.date)).first()
+
+	#print(type(maxDate[0]))
+	#print(type(start_date))
+	
+	return render_template('Group 7 Map.html', defaultDateStart=start_date, defaultDateEnd=end_date, maxDate=maxDate[0], minDate=minDate[0])
+
+@app.route('/setDate', methods=['GET', 'POST'])
+def setDate():
+	global end_date
+	global start_date
+	start_date = date.fromisoformat(request.args.get('chosenDateStart'))
+	end_date = date.fromisoformat(request.args.get('chosenDateEnd'))
+
+	return "Date has been changed!"
 	
 # data is sent from the client when they click on a state
 # a query is made
@@ -27,18 +42,23 @@ def main():
 @app.route('/geojson-features', methods=['GET'])
 def fe_request_by_state():
 	global end_date
-	start_date = end_date - timedelta(days=1)
+	global start_date
 	state = request.args.get('state')
 	table = request.args.get('table')
 	
+	delta = (end_date - start_date).days
+	
 	dict = {}
+	county_dict = {}
 	result = ""
 	#dict['table'] = table
-	
+
+
+
 	if table == "Vaccination":	
-		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
-		Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
-		
+		Q1 = Vaccination.query.filter_by(state=state, date=end_date)
+		Q2 = Vaccination.query.filter_by(state=state, date=start_date)
+			
 		for row in Q1:
 			dict[row.fips] = row.full_vax
 		
@@ -66,13 +86,21 @@ def fe_request_by_state():
 		for row in Q2:
 			if row.fips in dict:
 				dict[row.fips] -= row.deaths	
-				
+			
+		
+	population = County.query.filter_by(state=state);
+	for row in population:
+		county_dict[row.fips] = row.population 
+			
+	for key in dict:
+		dict[key] = (dict[key] / delta) / county_dict[key] * 100000
+			
 	return jsonify({"data" : dict})
 	
 #DATABASE -----------------------------------------------------------------------------------------------
 @app.route('/update-database', methods=['GET'])
 def fe_update_database():
-	print("pulling data")
+	print("pulling data: may take some time")
 	#reset_db()
 	start_time = time.time()
 	pulldata()
@@ -96,7 +124,7 @@ def pulldata():
 	json_CDC = requests.get(cdc_url).json()
 	
 	#counties data
-	with open('Aegis/static/USA_Counties.geojson') as dataFile:
+	with open('Aegis/static/USA_Counties_Reduced_2P.json') as dataFile:
 		data = dataFile.read()
 		obj = data[data.find('{') : data.rfind('}')+1]
 		countiesData = json.loads(obj)
