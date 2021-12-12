@@ -88,7 +88,7 @@
 		<form class="form-inline">
 		
 			<!-- Update the database -->
-			<!--<button type="button" onclick="updateDatabase()">Update the database</button>-->
+			<button type="button" onclick="updateDatabase()">Update the database</button>
 			<script>
 			function updateDatabase(){
 				$.ajax({
@@ -327,7 +327,7 @@
 		}
 
 		// global for recived back end data
-		var GlobalDataGlobalData
+		var GlobalData
 		
 		// the state most recently clicked on. So update can be called from other functions.
 		var current_feature
@@ -346,6 +346,7 @@
 				// receive result from back end 
 				success : function(result){
 					GlobalData = result.data
+					//console.log(GlobalData);
 					geojson2 = L.geoJson(countiesData, {
 						// only add state geojson
 						filter: function(feature, layer) {

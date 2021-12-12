@@ -46,18 +46,22 @@ def fe_request_by_state():
 	state = request.args.get('state')
 	table = request.args.get('table')
 	
+	#days between end_date and start_date
 	delta = (end_date - start_date).days
 	
+	# the data to be returned
 	dict = {}
+	
+	# the population per county
 	county_dict = {}
+	
 	result = ""
-	#dict['table'] = table
 
 
-
+	# end date - start date
 	if table == "Vaccination":	
-		Q1 = Vaccination.query.filter_by(state=state, date=end_date)
-		Q2 = Vaccination.query.filter_by(state=state, date=start_date)
+		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
+		Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
 			
 		for row in Q1:
 			dict[row.fips] = row.full_vax
@@ -69,8 +73,9 @@ def fe_request_by_state():
 	elif table == "Infection-Cases":
 		Q1 = Infected.query.filter_by(state=state, date=end_date).all()
 		Q2 = Infected.query.filter_by(state=state, date=start_date).all()
-	
 		for row in Q1:
+			if row.fips == '02998':
+				print(row)
 			dict[row.fips] = row.cases
 			
 		for row in Q2:
@@ -86,16 +91,27 @@ def fe_request_by_state():
 		for row in Q2:
 			if row.fips in dict:
 				dict[row.fips] -= row.deaths	
-			
 		
-	population = County.query.filter_by(state=state);
+	print(dict.keys())
+	population = County.query.filter_by(state=state).all();
 	for row in population:
 		county_dict[row.fips] = row.population 
 			
 	for key in dict:
-		dict[key] = (dict[key] / delta) / county_dict[key] * 100000
-			
+		try: 
+			dict[key] = (dict[key] / delta) / county_dict[key] * 100000
+		except:
+			#missing keys
+			print(key)
+			dict[key] = -1
+		
+	
 	return jsonify({"data" : dict})
+	#02998
+	#02997
+	
+	#02060
+	#02164
 	
 #DATABASE -----------------------------------------------------------------------------------------------
 @app.route('/update-database', methods=['GET'])
@@ -151,7 +167,7 @@ def pulldata():
 		row = item.split(',')
 		
 		#exit if not 2021
-		if(row[0][:7] != '2021-11'):
+		if((row[0][:7] != '2021-12') and (row[0][:7] != '2021-11')):
 			break;
 		
 		if (len(row) != 6):
@@ -169,8 +185,8 @@ def pulldata():
 	db.session.commit()
 	
 	for item in json_CDC[::-1]:
-		if(item['date'][:7] != '2021-11'):
-			continue;
+		if(item['date'][:7] != '2021-11' and item['date'][:7] != '2021-12'):
+			break;
 			
 		if County_exists(item['fips']):
 			if not Vaccination_exists(item['fips'], date.fromisoformat(item['date'][0:10])):
