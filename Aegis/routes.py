@@ -8,7 +8,7 @@ import requests
 import json 
 import time
 
-DEFAULT_DATE_STRING = '2021-11-04'
+DEFAULT_DATE_STRING = '2021-12-04'
 
 end_date =  date.fromisoformat(DEFAULT_DATE_STRING)
 start_date = end_date - timedelta(days=1)
@@ -104,7 +104,6 @@ def fe_request_by_state():
 			# keys not in county_dict
 			print(key)
 			dict[key] = -1
-		
 	
 	return jsonify({"data" : dict})
 	
