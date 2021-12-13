@@ -124,18 +124,31 @@
 			
 		</form>
 		<form class="form-inline">
-		
+			<!--hide password-->
+			<input type="text" id="password" placeholder="admin password" />
+
 			<!-- Update the database -->
-			<button type="button" onclick="updateDatabase()">Update the database</button>
+			<button type="button" onclick="updateDatabase()" id="button" disabled="disabled">Update the database</button>
 			<script>
-			function updateDatabase(){
-				$.ajax({
-					url: '/update-database',
-					data: {},
-					success: {}
+				$(document).ready(function () {
+					$('#password').on('input change', function () {
+						if ($(this).val() != 'please') {
+							$('#button').prop('disabled', true);
+						}
+						else {
+							$('#button').prop('disabled', false);
+						}
+					});
 				});
-			}
-			
+				function updateDatabase() {
+					$.ajax({
+						url: '/update-database',
+						data: {},
+						success: {}
+					});
+				}
+
+
 			</script>
 		</form>
 	</nav>
