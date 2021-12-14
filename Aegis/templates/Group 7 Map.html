@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	
 	<!-- CSS Files -->
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/leaflet-sidebar.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
@@ -45,7 +45,7 @@
         <!-- Nav tabs -->
         <div class="sidebar-tabs">
             <ul role="tablist">
-				<li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+				<li><a href="#home" role="tab"><i class="fa fa-bar-chart" aria-hidden="true"></i></a></li>
 				<li><a href="#profile" role="tab"><i class="fa fa-info"></i></a></li>
                 <li><a href="https://covid19.umbc.edu/contact-us/" role="tab"><i class="fa fa-envelope"></i></a></li>
                 <li><a href="https://github.com/ktipton2/aegis_team7_COVID19_map-" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
@@ -64,24 +64,21 @@
                     COVID-19 Statistics
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
-
                 <p>COVID-19 Map Dashboard by Team 7.</p>
-
-                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-
-                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-
-                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-
-                <p class="lorem">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-            </div>
+                </div>
 
             <div class="sidebar-pane" id="profile">
-                <h1 class="sidebar-header">Profile<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-            </div>
+                <h1 class="sidebar-header">More Information<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+				<section class="sidebar-section-text">
+					<p>UMBC’s is actively responding to positive cases, sick community members, and those exposed to someone with COVID-19.
+						If you test positive for COVID-19, please complete a case report form immediately to receive resources and support.
+					</p>
+					<p>If you believe you have been exposed to COVID-19, please review the information on this page.</p>
+				</section>
+			</div>
 
             <div class="sidebar-pane" id="messages">
-                <h1 class="sidebar-header">Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <h1 class="sidebar-header">Contact<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
             </div>
 
             <div class="sidebar-pane" id="settings">
@@ -90,9 +87,15 @@
         </div>
     </div>
 	
+	<nav class="navbar navbar-dark justify-content-between" style="background-color: black; height:3rem;  border-bottom-style: solid; border-bottom-width: .5rem; border-bottom-color: #fdb515;">
+		<a href="https://www.umbc.edu/" class="h1-page-name" role="link"><i> </i>Covid-19 Dashboard</a>
+		<!--hide password-->
+		<input type="text" id="password" placeholder="admin password" />
+	</nav>
+
+
 	<!-- The Navbar -->
 	<nav class="navbar navbar-dark justify-content-between" style="background-color: white;">
-		<a class="navbar-brand"><h1 class="header1">Covid Dashboard</h1></a>
 		<form class="form-inline">
 		
 			<!-- navbar table select -->
@@ -124,11 +127,9 @@
 			
 		</form>
 		<form class="form-inline">
-			<!--hide password-->
-			<input type="text" id="password" placeholder="admin password" />
 
 			<!-- Update the database -->
-			<button type="button" onclick="updateDatabase()" id="button" disabled="disabled">Update the database</button>
+			<button type="button" class="btn-update" onclick="updateDatabase()" id="button" disabled="disabled">Update the database</button>
 			<script>
 				$(document).ready(function () {
 					$('#password').on('input change', function () {
