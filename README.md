@@ -42,7 +42,7 @@ https://bost.ocks.org/mike/leaflet/
 
 in the root folder (the one this file is in) run: 
 ```
-py -m venv
+py -m venv venv
 ```
 
 to activate your venv: 
