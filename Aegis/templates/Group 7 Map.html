@@ -65,6 +65,7 @@
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
                 <p>COVID-19 Map Dashboard by Team 7.</p>
+				<div id = "container" style = "width: 550px; height: 400px; margin: 0 auto"></div>
                 </div>
 
             <div class="sidebar-pane" id="profile">
@@ -74,6 +75,11 @@
 						If you test positive for COVID-19, please complete a case report form immediately to receive resources and support.
 					</p>
 					<p>If you believe you have been exposed to COVID-19, please review the information on this page.</p>
+				</section>
+				<section class="sidebar-section-text">
+					<p>This dashboard presents a choropleth map, indicating a rate of new cases over the select  period of time per 100'000. 
+					</p>
+					<p>number of new cases / number of days / population *  100000</p>
 				</section>
 			</div>
 
@@ -92,6 +98,33 @@
 		<!--hide password-->
 		<input type="text" id="password" placeholder="admin password" />
 	</nav>
+
+	<script type = "text/javascript" src = "https://www.gstatic.com/charts/loader.js">
+      </script>
+      <script type = "text/javascript">
+         google.charts.load('current', {packages: ['corechart']});     
+      </script>
+	<script language = "JavaScript">
+         function drawChart() {
+            // Define the chart to be drawn.
+            var data = google.visualization.arrayToDataTable([
+               ['Year', 'Asia'],
+               ['2012',  900],
+               ['2013',  1000],
+               ['2014',  1170],
+               ['2015',  1250],
+               ['2016',  1530]
+            ]);
+
+            var options = {title: 'Population (in millions)'}; 
+
+            // Instantiate and draw the chart.
+            var chart = new google.visualization.BarChart(document.getElementById('container'));
+            chart.draw(data, options);
+         }
+         google.charts.setOnLoadCallback(drawChart);
+      </script>
+
 
 
 	<!-- The Navbar -->
