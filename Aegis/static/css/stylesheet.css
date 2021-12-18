@@ -8,6 +8,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+    min-width: 390px;
 }
 .navbar-brand h1{
     font-family: 'Inter', sans-serif;
@@ -18,13 +19,8 @@ html, body {
 
 #map {
     width: 100%;
-    height: 94%;
+    height: 88%;
     display: flex;
-}
-
-/* Drop Down Menu */
-.form-select{
-    background:black;
 }
 
 /* Map */
@@ -64,4 +60,34 @@ html, body {
 .navbar{
     background-color:white;
 
+}
+.sidebar-section-text{
+    border-bottom-style: solid;
+    border-bottom-width: .01rem;
+    border-bottom-color: #c7c8ca;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+/* ******************************** */
+/* Navbar Modules                   */
+/* Search bar, date forms, update   */
+/* ******************************** */
+.h1-page-name{
+    font-size: 18px;
+    font-weight: 300;
+    color:white; 
+    padding-bottom:0px;
+    margin-bottom:0px;
+}
+
+
+/* Button(s) */
+.btn-update{
+    background-color: #fdb515;
+    border-style: none;
+    border-radius: 5px;
+    height:2.4rem;
+    width:12rem;
+    color:black;
 }

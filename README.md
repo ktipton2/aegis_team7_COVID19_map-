@@ -6,6 +6,7 @@ Ryan Orndoff, Johnathan Brown, Amy Phan
 
 ## About The Project
 
+<i>You can use a windows or mac device for this application. </i>
 
 **Languages and Tools:**
 <p> <a href="https://getbootstrap.com" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg" alt="bootstrap" width="40" height="40"/> </a> <a href="https://www.w3schools.com/css/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a> <a href="https://flask.palletsprojects.com/" target="_blank"> <img src="https://d2knvm16wkt3ia.cloudfront.net/assets/svg-icon/flask.svg" alt="flask" width="40" height="40"/> </a><a href="https://www.mysql.com/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a></p>
@@ -15,13 +16,11 @@ Ryan Orndoff, Johnathan Brown, Amy Phan
 - flask-sqlalchemy
 - requests
 
-**Web Functionality Features:**
-
-
-
 **Data Sources**
 
 <u>CDC API of COVID-19 Vaccinations in the United States, County​</u>
+
+API that contains the vaccinations data of all counties.
 
 https://data.cdc.gov/resource/8xkx-amqh.json
 
@@ -30,6 +29,12 @@ https://data.cdc.gov/resource/8xkx-amqh.json
 GitHub repo containing bot information as well as .csv files by state, by county for use as a dataset ; Live data versions updated several times each day​.
 
 https://github.com/nytimes/covid-19-data    
+
+<u>State geoJSON </u>
+
+Code that adds custom overlays for states using D3 to render the GeoJSON shapes in conjunction with Leaflet. 
+
+https://bost.ocks.org/mike/leaflet/ 
 
 ## To set up venv
 
