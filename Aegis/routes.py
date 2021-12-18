@@ -63,6 +63,9 @@ def fe_request_by_state():
 		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
 		Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
 			
+		#print(Q1)
+		#print(Q2)
+			
 		for row in Q1:
 			dict[row.fips] = row.full_vax
 		
@@ -92,14 +95,15 @@ def fe_request_by_state():
 			if row.fips in dict:
 				dict[row.fips] -= row.deaths	
 		
-	print(dict.keys())
+	#print(dict.keys())
 	population = County.query.filter_by(state=state).all();
 	for row in population:
 		county_dict[row.fips] = row.population 
-			
+	
+	# Per Capita Calculation by Current Feature
 	for key in dict:
 		try: 
-			dict[key] = (dict[key] / delta) / county_dict[key] * 100000
+			dict[key] = round((dict[key] / delta) / county_dict[key] * 100000, 2)
 		except:
 			# keys not in county_dict
 			print(key)
