@@ -91,3 +91,7 @@ html, body {
     width:12rem;
     color:black;
 }
+
+button:disabled{
+	background-color: grey;
+}

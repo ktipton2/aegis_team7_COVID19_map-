@@ -63,9 +63,6 @@ def fe_request_by_state():
 		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
 		Q2 = Vaccination.query.filter_by(state=state, date=start_date).all()
 			
-		#print(Q1)
-		#print(Q2)
-			
 		for row in Q1:
 			dict[row.fips] = row.full_vax
 		
@@ -77,8 +74,6 @@ def fe_request_by_state():
 		Q1 = Infected.query.filter_by(state=state, date=end_date).all()
 		Q2 = Infected.query.filter_by(state=state, date=start_date).all()
 		for row in Q1:
-			if row.fips == '02998':
-				print(row)
 			dict[row.fips] = row.cases
 			
 		for row in Q2:
@@ -93,7 +88,8 @@ def fe_request_by_state():
 			
 		for row in Q2:
 			if row.fips in dict:
-				dict[row.fips] -= row.deaths	
+				dict[row.fips] -= row.deaths
+				
 		
 	#print(dict.keys())
 	population = County.query.filter_by(state=state).all();
@@ -107,7 +103,7 @@ def fe_request_by_state():
 		except:
 			# keys not in county_dict
 			print(key)
-			dict[key] = -1
+			dict[key] = None
 	
 	return jsonify({"data" : dict})
 	
@@ -120,6 +116,7 @@ def fe_update_database():
 	pulldata()
 	print("done")
 	print("--- %s seconds ---" % (time.time() - start_time))
+		
 	return jsonify({"data" : True}) 
 
 def reset_db():
@@ -132,6 +129,8 @@ def pulldata():
 	counties_url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
 	# CDC API .json
 	cdc_url = 'https://data.cdc.gov/resource/8xkx-amqh.json?$limit=50000'
+	#&$offset=150000
+	
 	# list of csv
 	list_NYT = requests.get(counties_url, headers={"content-type":"text"}).text.split('\n')
 	# dict json.
@@ -163,7 +162,7 @@ def pulldata():
 	
 	for item in list_NYT[::-1]:
 		row = item.split(',')
-		
+		#print(row)
 		#exit if not 2021
 		if((row[0][:7] != '2021-12') and (row[0][:7] != '2021-11')):
 			break;

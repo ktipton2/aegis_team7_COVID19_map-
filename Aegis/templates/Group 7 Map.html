@@ -105,6 +105,15 @@
          google.charts.load('current', {packages: ['corechart']});     
       </script>
 	<script language = "JavaScript">
+	
+		function updateData(){
+			tname = table + ' Rate'
+			cname = 
+			array = [[ ,tname]]
+			array.push 
+		
+		}
+	
          function drawChart() {
             // Define the chart to be drawn.
             var data = google.visualization.arrayToDataTable([
@@ -315,8 +324,10 @@
 			if(typeof props !== 'undefined'){
 				if (props.hasOwnProperty('FIPS')){
 					this._div.innerHTML = table + ' Rate<br />'+  (props ?
-					'<b> ' + props.NAME + '</b><br />' + GlobalData[props.FIPS] + ' people / day'
-					: 'Hover over a county');
+					'<b> ' + props.NAME + '</b><br />' + GlobalData[props.FIPS] + ' per 100\'000 people'
+					: 'Hover over a county')
+					+ '<br />' + 'Population: ' + props.POPULATION					
+					;
 				}
 				else{
 					this._div.innerHTML = 'Hover over a county (left click to zoom out)';
@@ -329,6 +340,10 @@
 
 		// get color depending on county
 		function getColor(d) {
+			if (typeof d === 'undefined' || d == null){
+				return 'green'
+			}
+		
 			if(table == "Infection-Deaths"){
 				return d > 20  ? '#000000' :
 					d > 15   ? '#252525' :
