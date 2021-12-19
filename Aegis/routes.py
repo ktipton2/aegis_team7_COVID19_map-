@@ -46,6 +46,8 @@ def fe_request_by_state():
 	state = request.args.get('state')
 	table = request.args.get('table')
 	
+	#print(start_date, end_date)
+	
 	#days between end_date and start_date
 	delta = (end_date - start_date).days
 	
@@ -57,7 +59,6 @@ def fe_request_by_state():
 	
 	result = ""
 
-
 	# end date - start date
 	if table == "Vaccination":	
 		Q1 = Vaccination.query.filter_by(state=state, date=end_date).all()
@@ -66,19 +67,21 @@ def fe_request_by_state():
 		for row in Q1:
 			dict[row.fips] = row.full_vax
 		
-		for row in Q2:
-			if row.fips in dict:
-				dict[row.fips] -= row.full_vax	
-		
+		if start_date != end_date:
+			for row in Q2:
+				if row.fips in dict:
+					dict[row.fips] -= row.full_vax	
+				
 	elif table == "Infection-Cases":
 		Q1 = Infected.query.filter_by(state=state, date=end_date).all()
 		Q2 = Infected.query.filter_by(state=state, date=start_date).all()
 		for row in Q1:
 			dict[row.fips] = row.cases
-			
-		for row in Q2:
-			if row.fips in dict:
-				dict[row.fips] -= row.cases	
+		
+		if start_date != end_date:	
+			for row in Q2:
+				if row.fips in dict:
+					dict[row.fips] -= row.cases	
 	else:
 		Q1 = Infected.query.filter_by(state=state, date=end_date).all()
 		Q2 = Infected.query.filter_by(state=state, date=start_date).all()
@@ -86,9 +89,10 @@ def fe_request_by_state():
 		for row in Q1:
 			dict[row.fips] = row.deaths
 			
-		for row in Q2:
-			if row.fips in dict:
-				dict[row.fips] -= row.deaths
+		if start_date != end_date:	
+			for row in Q2:
+				if row.fips in dict:
+					dict[row.fips] -= row.deaths
 				
 		
 	#print(dict.keys())
@@ -96,6 +100,9 @@ def fe_request_by_state():
 	for row in population:
 		county_dict[row.fips] = row.population 
 	
+	if start_date == end_date:
+		delta = 1
+		
 	# Per Capita Calculation by Current Feature
 	for key in dict:
 		try: 

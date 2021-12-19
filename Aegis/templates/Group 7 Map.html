@@ -66,6 +66,7 @@
                 </h1>
                 <p>COVID-19 Map Dashboard by Team 7.</p>
 				<div id="columnchart_values" style="width: 400px; height: 300px"></div>
+				<div id="bubblechart_values" style="width: 400px; height: 300px"></div>
                 </div>
 
             <div class="sidebar-pane" id="profile">
@@ -97,7 +98,7 @@
     </div>
 	
 	<nav class="navbar navbar-dark justify-content-between" style="background-color: black; height:3rem;  border-bottom-style: solid; border-bottom-width: .5rem; border-bottom-color: #fdb515;">
-		<a href="https://www.umbc.edu/" class="h1-page-name" role="link"><i> </i>Covid-19 Dashboard</a>
+		<a href="https://github.com/ktipton2/aegis_team7_COVID19_map-" class="h1-page-name" role="link"><i> </i>Covid-19 Dashboard</a>
 		<!--hide password-->
 		<input type="text" id="password" placeholder="admin password" />
 	</nav>
@@ -106,10 +107,11 @@
   <script type="text/javascript">
   
 	var columnChart
-  
+    var bubbleChart
+	
 	function makeData(){
 	
-		array = [["Element", "Density", { role: "style" } ]]
+		array = [["Name", "Rate", { role: "style" } ]]
 		geojson2.eachLayer(function(layer){
 			prop = layer.feature.properties;
 			array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
@@ -123,32 +125,18 @@
 	}
   
     google.charts.load("current", {packages:['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-    
-	function drawChart() {
-      var data = google.visualization.arrayToDataTable(
-	  [["Element", "Density", { role: "style" } ],
-        ["Copper", 8.94, "#b87333"]]);
-
-      var view = new google.visualization.DataView(data);
-      view.setColumns([0, 1,
-                       { calc: "stringify",
-                         sourceColumn: 1,
-                         type: "string",
-                         role: "annotation" },
-                       2]);
-
-      var options = {
-        title: "Density of Precious Metals, in g/cm^3",
-		chartArea:{left:0, top:0},
-		explorer:{},
-        width: 600,
-        height: 400,
-        bar: {groupWidth: "95%"},
-        legend: { position: "none" },
-      };
-      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-	  columnChart = chart;
+    google.charts.setOnLoadCallback(initializeColumn);
+    google.charts.setOnLoadCallback(initializeBubble);
+	
+	function initializeBubble() {
+		var chart = new google.visualization.PieChart(document.getElementById('bubblechart_values'));
+		bubbleChart = chart;
+	}
+	 
+	 
+	function initializeColumn() {
+		var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+		columnChart = chart;
   }
   </script>
 
@@ -342,7 +330,7 @@
 			if(typeof props !== 'undefined'){
 				if (props.hasOwnProperty('FIPS')){
 					this._div.innerHTML = table + ' Rate<br />'+  (props ?
-					'<b> ' + props.NAME + '</b><br />' + GlobalData[props.FIPS] + ' per 100\'000 people'
+					'<b> ' + props.NAME + ' : ' +  props.FIPS + '</b><br />' + GlobalData[props.FIPS] + ' per 100\'000 people'
 					: 'Hover over a county')
 					+ '<br />' + 'Population: ' + props.POPULATION					
 					;
@@ -482,6 +470,7 @@
 				}
 			});
 			columnChart.draw(makeData());
+			bubbleChart.draw(makeData());
 		}
 
 		//state onEachFeature
