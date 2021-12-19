@@ -125,19 +125,12 @@
 	}
   
     google.charts.load("current", {packages:['corechart']});
-    google.charts.setOnLoadCallback(initializeColumn);
-    google.charts.setOnLoadCallback(initializeBubble);
+    google.charts.setOnLoadCallback(initializeCharts);
 	
-	function initializeBubble() {
-		var chart = new google.visualization.PieChart(document.getElementById('bubblechart_values'));
-		bubbleChart = chart;
+	function initializeCharts() {
+		bubbleChart = new google.visualization.PieChart(document.getElementById('bubblechart_values'));
+		columnChart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
 	}
-	 
-	 
-	function initializeColumn() {
-		var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-		columnChart = chart;
-  }
   </script>
 
 
