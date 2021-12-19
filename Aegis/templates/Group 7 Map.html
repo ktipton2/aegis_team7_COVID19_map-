@@ -59,86 +59,79 @@
 
         <!-- Tab panes -->
         <div class="sidebar-content">
+			<!-- COVID-19 Statistics -->
             <div class="sidebar-pane" id="home">
                 <h1 class="sidebar-header">
                     COVID-19 Statistics
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
-                <p>COVID-19 Map Dashboard by Team 7.</p>
-				<div id="columnchart_values" style="width: 400px; height: 300px"></div>
-				<div id="bubblechart_values" style="width: 400px; height: 300px"></div>
+				<section class="sidebar-section-text-info" >
+					<p>This dashboard presents a choropleth map, indicating a rate of new cases over the select  period of time per 100'000. 
+					</p>
+					<p><b>number of new cases / number of days / population *  100000</b></p>
+				</section>
+				<div id="columnchart_values" ></div>
+				<div id="bubblechart_values" ></div>
+				<section class="sidebar-section-text-info">
+					<p>Counties with missing data will render as green</p>
+				</section>
                 </div>
-
+			<!-- More information -->
             <div class="sidebar-pane" id="profile">
                 <h1 class="sidebar-header">More Information<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 				<section class="sidebar-section-text">
 					<p>This dashboard provides timely data about the prevalence of COVID-19 within our country on a state level.
 						Testing data includes: COVID-19 case, vaccination, and death rates provided by the CDC Data API and NYTimes API. </p>
-				</section>
+				
+						<p><u>CDC API of COVID-19 Vaccinations in the United States, County​</u></p>
+
+						<p>API that contains the vaccinations data of all counties.</p>
+						
+						<a href="https://data.cdc.gov/resource/8xkx-amqh.json" role="link"><i>https://data.cdc.gov/resource/8xkx-amqh.json</i></a>
+						
+						<u>New York Times Coronavirus (Covid-19) Data in the United States on GitHub​</u>
+						
+						<p>GitHub repo containing bot information as well as .csv files by state, by county for use as a dataset ; Live data versions updated several times each day​.</p>
+						
+						<a href="https://github.com/nytimes/covid-19-data" role="link"><i>https://github.com/nytimes/covid-19-data</i></a> 
+						
+						<u>State geoJSON </u>
+						
+						<p>Code that adds custom overlays for states using D3 to render the GeoJSON shapes in conjunction with Leaflet.</p>
+						
+						<a href="https://bost.ocks.org/mike/leaflet/" role="link"><i>https://bost.ocks.org/mike/leaflet/</i></a>
+						
+						<u>County geoJSON </u>
+						
+						<p>A dataset containing the GeoJSON shapes for US counties, as well as population data. This dataset is very large, our application uses a reduced precision version of the geoJSON, created using  mapshaper.</p> 
+						
+						<a href="https://hub.arcgis.com/datasets/esri::usa-counties/about" role="link"><i>https://hub.arcgis.com/datasets/esri::usa-counties/about</i></a>
+						
+						<a href="https://mapshaper.org/" role="link"><i>https://mapshaper.org/</i></a>
+				
+					</section>
 				<section class="sidebar-section-text">
 					<p>UMBC’s is actively responding to positive cases, sick community members, and those exposed to someone with COVID-19.
 						If you test positive for COVID-19, please complete a case report form immediately to receive resources and support.
 					</p>
 					<p>If you believe you have been exposed to COVID-19, please review the information on this page.</p>
-				</section>
-				<section class="sidebar-section-text">
-					<p>This dashboard presents a choropleth map, indicating a rate of new cases over the select  period of time per 100'000. 
-					</p>
-					<p>number of new cases / number of days / population *  100000</p>
-				</section>
-				<section class="sidebar-section-text">
-					<p>Counties with missing data will render as green</p>
-				</section>
+				</section>			
 			</div>
-
-            <div class="sidebar-pane" id="messages">
-                <h1 class="sidebar-header">Contact<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-            </div>
-
+			<!-- Settings -->
             <div class="sidebar-pane" id="settings">
                 <h1 class="sidebar-header">Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-            </div>
+				<p>COVID-19 Map Dashboard by Team 7.</p>
+			</div>
         </div>
     </div>
 	
+	<!-- Main Top Header Bar -->
 	<nav class="navbar navbar-dark justify-content-between" style="background-color: black; height:3rem;  border-bottom-style: solid; border-bottom-width: .5rem; border-bottom-color: #fdb515;">
-		<a href="https://www.umbc.edu/" class="h1-page-name" role="link"><i><img src="{{ url_for('static', filename='doc/UMBC_Logo.png') }}" class="logo-img"></i>Covid-19 Dashboard</a>
+		<a href="https://www.umbc.edu/" class="h1-page-name" role="link"><i><img src="{{ url_for('static', filename='doc/UMBC_Logo.png') }}" class="logo-img"></i>COVID-19 Dashboard</a>
 		<!--hide password-->
 		<input type="text" id="password" placeholder=" Admin Password" />
 		
 	</nav>
-
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript">
-  
-	var columnChart
-    var bubbleChart
-	
-	function makeData(){
-	
-		array = [["Name", "Rate", { role: "style" } ]]
-		geojson2.eachLayer(function(layer){
-			prop = layer.feature.properties;
-			array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
-		});	
-		
-		var data = google.visualization.arrayToDataTable(array);
-
-		var view = new google.visualization.DataView(data);
-		
-		return view;
-	}
-  
-    google.charts.load("current", {packages:['corechart']});
-    google.charts.setOnLoadCallback(initializeCharts);
-	
-	function initializeCharts() {
-		bubbleChart = new google.visualization.PieChart(document.getElementById('bubblechart_values'));
-		columnChart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-	}
-  </script>
-
-
 
 	<!-- The Navbar -->
 	<nav class="navbar navbar-dark justify-content-between" style="background-color: white;">
@@ -210,6 +203,37 @@
 	<!-- import JS files for side bar -->
 	<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='leaflet-sidebar.js') }}"></script>
+
+	<!-- Chart Script -->
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  	<script type="text/javascript">
+  
+	var columnChart
+    var bubbleChart
+	
+	function makeData(){
+	
+		array = [["Name", "Rate", { role: "style" } ]]
+		geojson2.eachLayer(function(layer){
+			prop = layer.feature.properties;
+			array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
+		});	
+		
+		var data = google.visualization.arrayToDataTable(array);
+
+		var view = new google.visualization.DataView(data);
+		
+		return view;
+	}
+  
+    google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(initializeCharts);
+	
+	function initializeCharts() {
+		bubbleChart = new google.visualization.PieChart(document.getElementById('bubblechart_values'));
+		columnChart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+	}
+  </script>
 
 	<!-- main javascript -->
 	<script type="text/javascript">

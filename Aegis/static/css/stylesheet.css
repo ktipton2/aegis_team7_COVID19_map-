@@ -19,7 +19,8 @@ html, body {
 
 #map {
     width: 100%;
-    height: 88%;
+    height: 88vh;
+  
     display: flex;
 }
 .h1-page-name{
@@ -95,6 +96,15 @@ html, body {
     padding-top: 1rem;
 }
 
+.sidebar-section-text-info{
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+#profile .sidebar-section-text .p{
+    word-wrap: break-word;
+}
+
 /* ******************************** */
 /* Navbar Modules                   */
 /* Search bar, date forms, update   */
@@ -120,4 +130,27 @@ html, body {
 
 button:disabled{
 	background-color: grey;
+}
+
+/* Graphs */
+#columnchart_values{
+    width: 100%;
+    height: 80%;
+    margin:0;
+    padding:0;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2); 
+	border-radius: 5px;
+    margin-bottom:5%;
+    padding-bottom:20px;
+    color:white; 
+}
+
+#bubblechart_values{
+    width:  100%;
+    height: 80%;
+    margin:0;
+    padding:0;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2); 
+	border-radius: 5px;
+    color:white; 
 }
