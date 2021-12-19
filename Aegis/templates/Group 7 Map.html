@@ -65,7 +65,7 @@
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
                 <p>COVID-19 Map Dashboard by Team 7.</p>
-				<div id = "container" style = "width: 550px; height: 400px; margin: 0 auto"></div>
+				<div id="columnchart_values" style="width: 400px; height: 300px"></div>
                 </div>
 
             <div class="sidebar-pane" id="profile">
@@ -80,6 +80,9 @@
 					<p>This dashboard presents a choropleth map, indicating a rate of new cases over the select  period of time per 100'000. 
 					</p>
 					<p>number of new cases / number of days / population *  100000</p>
+				</section>
+				<section class="sidebar-section-text">
+					<p>Counties with missing data will render as green</p>
 				</section>
 			</div>
 
@@ -99,40 +102,55 @@
 		<input type="text" id="password" placeholder="admin password" />
 	</nav>
 
-	<script type = "text/javascript" src = "https://www.gstatic.com/charts/loader.js">
-      </script>
-      <script type = "text/javascript">
-         google.charts.load('current', {packages: ['corechart']});     
-      </script>
-	<script language = "JavaScript">
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+  
+	var columnChart
+  
+	function makeData(){
 	
-		function updateData(){
-			tname = table + ' Rate'
-			cname = 
-			array = [[ ,tname]]
-			array.push 
+		array = [["Element", "Density", { role: "style" } ]]
+		geojson2.eachLayer(function(layer){
+			prop = layer.feature.properties;
+			array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
+		});	
 		
-		}
-	
-         function drawChart() {
-            // Define the chart to be drawn.
-            var data = google.visualization.arrayToDataTable([
-               ['Year', 'Asia'],
-               ['2012',  900],
-               ['2013',  1000],
-               ['2014',  1170],
-               ['2015',  1250],
-               ['2016',  1530]
-            ]);
+		var data = google.visualization.arrayToDataTable(array);
 
-            var options = {title: 'Population (in millions)'}; 
+		var view = new google.visualization.DataView(data);
+		
+		return view;
+	}
+  
+    google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    
+	function drawChart() {
+      var data = google.visualization.arrayToDataTable(
+	  [["Element", "Density", { role: "style" } ],
+        ["Copper", 8.94, "#b87333"]]);
 
-            // Instantiate and draw the chart.
-            var chart = new google.visualization.BarChart(document.getElementById('container'));
-            chart.draw(data, options);
-         }
-         google.charts.setOnLoadCallback(drawChart);
-      </script>
+      var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       2]);
+
+      var options = {
+        title: "Density of Precious Metals, in g/cm^3",
+		chartArea:{left:0, top:0},
+		explorer:{},
+        width: 600,
+        height: 400,
+        bar: {groupWidth: "95%"},
+        legend: { position: "none" },
+      };
+      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+	  columnChart = chart;
+  }
+  </script>
 
 
 
@@ -268,7 +286,7 @@
 									//console.log(geojson2);
 									geojson2.eachLayer(function(layer){
 										if (layer.feature.properties.FIPS == selection.FIPS){
-											highlightFeature({"target" : layer}); 
+											highlightFeature({"target" : layer});
 										}
 									});	
 									
@@ -471,11 +489,11 @@
 				mouseover: highlightFeature,
 				mouseout: resetHighlight,
 				contextmenu: zoomFromFeature,
-				click: function(event){resetHighlight(event); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer); }
+				click: function(event){resetHighlight(event); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer); columnChart.draw(makeData());}
 				//click: layer.setStyle({fillColor :'blue'})
 			});
 		}
-
+		
 		// replace the state that was removed
 		function showLayers (){
 			geojson.eachLayer(function(layer){
