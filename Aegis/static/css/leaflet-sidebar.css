@@ -16,39 +16,21 @@
         left: 10px; 
       } 
     }
-    @media (min-width: 50px) and (max-width: 388px){
+    @media (min-width: 0px) and (max-width: 493px){
       .sidebar{
-        top:20.3rem;
+        top:16.3rem;
+        height: 30vh;
+      }
+    }
+    @media (min-width: 495px) and (max-width: 576px){
+      .sidebar{
+        top:13.9rem;
         height: 60vh;
       }
     }
-    @media (min-width: 389px) and (max-width: 498px){
+    @media (min-width: 577px) and (max-width: 742px){
       .sidebar{
-        top:13.5rem;
-        height: 60vh;
-      }
-    }
-    @media (min-width: 499px) and (max-width: 575px){
-      .sidebar{
-        top:13.5rem;
-        height: 60vh;
-      }
-    }
-    @media (min-width: 576px) and (max-width: 600px){
-      .sidebar{
-        top:11.5rem;
-        height: 60vh;
-      }
-    }
-    @media (min-width: 583px) and (max-width: 600px){
-      .sidebar{
-        top:9.5rem;
-        height: 60vh;
-      }
-    }
-    @media (min-width: 600px) and (max-width: 742px){
-      .sidebar{
-        top: 11.5rem;
+        top: 11.9rem;
         height: 60vh;
       }
     }

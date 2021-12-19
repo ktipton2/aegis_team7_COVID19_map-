@@ -45,15 +45,15 @@
         <!-- Nav tabs -->
         <div class="sidebar-tabs">
             <ul role="tablist">
-				<li><a href="#home" role="tab"><i class="fa fa-bar-chart" aria-hidden="true"></i></a></li>
-				<li><a href="#profile" role="tab"><i class="fa fa-info"></i></a></li>
-                <li><a href="https://covid19.umbc.edu/contact-us/" role="tab"><i class="fa fa-envelope"></i></a></li>
-                <li><a href="https://github.com/ktipton2/aegis_team7_COVID19_map-" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
+				<li data-toggle="tooltip" data-placement="right" title="Charts display information about Top 5 Counties in current State with highest values of filtered information"><a href="#home" role="tab"><i class="fa fa-bar-chart" aria-hidden="true"></i></a></li>
+				<li data-toggle="tooltip" data-placement="right" title="More information about COVID-19"><a href="#profile" role="tab"><i class="fa fa-info"></i></a></li>
+                <li data-toggle="tooltip" data-placement="right" title="Contact us about COVID-19"><a href="https://covid19.umbc.edu/contact-us/" role="tab"><i class="fa fa-envelope"></i></a></li>
+                <li data-toggle="tooltip" data-placement="right" title="COVID-19 Dashboard GitHub Project"><a href="https://github.com/ktipton2/aegis_team7_COVID19_map-" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
 				<li class="disabled"><a href="#messages" role="tab"><i class="fa fa-envelope"></i></a></li>
 			</ul>
 
             <ul role="tablist">
-                <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+                <li data-placement="right" title="Settings"><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
             </ul>
         </div>
 
@@ -71,6 +71,10 @@
 
             <div class="sidebar-pane" id="profile">
                 <h1 class="sidebar-header">More Information<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+				<section class="sidebar-section-text">
+					<p>This dashboard provides timely data about the prevalence of COVID-19 within our country on a state level.
+						Testing data includes: COVID-19 case, vaccination, and death rates provided by the CDC Data API and NYTimes API. </p>
+				</section>
 				<section class="sidebar-section-text">
 					<p>UMBC’s is actively responding to positive cases, sick community members, and those exposed to someone with COVID-19.
 						If you test positive for COVID-19, please complete a case report form immediately to receive resources and support.
@@ -98,9 +102,10 @@
     </div>
 	
 	<nav class="navbar navbar-dark justify-content-between" style="background-color: black; height:3rem;  border-bottom-style: solid; border-bottom-width: .5rem; border-bottom-color: #fdb515;">
-		<a href="https://github.com/ktipton2/aegis_team7_COVID19_map-" class="h1-page-name" role="link"><i> </i>Covid-19 Dashboard</a>
+		<a href="https://www.umbc.edu/" class="h1-page-name" role="link"><i><img src="{{ url_for('static', filename='doc/UMBC_Logo.png') }}" class="logo-img"></i>Covid-19 Dashboard</a>
 		<!--hide password-->
 		<input type="text" id="password" placeholder="admin password" />
+		
 	</nav>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -527,7 +532,9 @@
 
 		legend.addTo(map);
 
+		// side bar
 		var sidebar = L.control.sidebar('sidebar').addTo(map);
+
 	</script>
 
 </body>
