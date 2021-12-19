@@ -481,6 +481,7 @@
 					}).addTo(map);
 				}
 			});
+			columnChart.draw(makeData());
 		}
 
 		//state onEachFeature
@@ -489,7 +490,7 @@
 				mouseover: highlightFeature,
 				mouseout: resetHighlight,
 				contextmenu: zoomFromFeature,
-				click: function(event){resetHighlight(event); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer); columnChart.draw(makeData());}
+				click: function(event){resetHighlight(event); update(feature); zoomToFeature(event); showLayers(); map.removeLayer(layer);}
 				//click: layer.setStyle({fillColor :'blue'})
 			});
 		}
