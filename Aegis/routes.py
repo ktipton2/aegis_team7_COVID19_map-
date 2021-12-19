@@ -25,7 +25,7 @@ def main():
 	#print(type(maxDate[0]))
 	#print(type(start_date))
 	
-	return render_template('Group 7 Map.html', defaultDateStart=start_date, defaultDateEnd=end_date, maxDate=maxDate[0], minDate=minDate[0])
+	return render_template('Group 7 Map.html', defaultDateStart=start_date, defaultDateEnd=end_date, maxStartDate=maxDate[0], minStartDate=minDate[0], maxEndDate=maxDate[0], minEndDate=start_date+timedelta(days=1))
 
 @app.route('/setDate', methods=['GET', 'POST'])
 def setDate():

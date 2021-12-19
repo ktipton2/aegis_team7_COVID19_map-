@@ -161,14 +161,14 @@
 			<!-- navbar date select -->
 			<label for="dateStart">
 				Start Date:&nbsp;
-				<input class="form-control" onchange="setDate()" type="date" id="dateStart" name="chosenDateStart" value="{{defaultDateStart}}" min="{{minDate}}" max="{{maxDate}}">
+				<input class="form-control" onchange="setDate()" type="date" id="dateStart" name="chosenDateStart" value="{{defaultDateStart}}" min="{{minStartDate}}" max="{{maxStartDate}}">
 			</label>
 		</form>
 		<form action="/" class="form-inline">
 			<!-- navbar date select -->
 			<label for="dateEnd">
 				End Date:&nbsp;
-				<input class="form-control" onchange="setDate()" type="date" id="dateEnd" name="chosenDateEnd" value="{{defaultDateEnd}}" min="{{minDate}}" max="{{maxDate}}">
+				<input class="form-control" onchange="setDate()" type="date" id="dateEnd" name="chosenDateEnd" value="{{defaultDateEnd}}" min="{{minEndDate}}" max="{{maxEndDate}}">
 			</label>
 			
 		</form>
@@ -282,6 +282,8 @@
 					});
 
 		function setDate() {
+			var endDate = document.getElementById("dateEnd");
+			endDate.min = document.getElementById("dateStart").value;
 			$.ajax({
 				url: '/setDate', 
 				data: {chosenDateStart: document.getElementById("dateStart").value, chosenDateEnd: document.getElementById("dateEnd").value}, 
