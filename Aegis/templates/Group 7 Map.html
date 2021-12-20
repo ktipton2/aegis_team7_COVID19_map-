@@ -70,7 +70,7 @@
 				<div id="chartExponential" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div>
 				<div id="series_chart_div" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div>
 				<div id="stepchart_div" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div>
-		    		<div id="column_values" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div>
+		    		<div id="columnchart_values" style="margin: 0; padding: 0; width: 50%; height: 50%;"></div>
 				<section class="sidebar-section-text-info" >
 					<p>This dashboard presents a choropleth map, indicating a rate of new cases over the select  period of time per 100'000. 
 					</p>
@@ -226,18 +226,20 @@
 		
 	  function makeColData(){
 	  
-		  array = [["County", "Per Capita Rate", { role: "style" }]]
-		  geojson2.eachLayer(function(layer){
-			  prop = layer.feature.properties;
-			  array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
-		  });
-		  
-		  var data = google.visualization.arrayToDataTable(array);
-  
-		  var view = new google.visualization.DataView(data);
-		  
-		  return view;
-	  }
+		array = [["County", "Per Capita Rate", { role: "style" }]]
+		geojson2.eachLayer(function(layer){
+			prop = layer.feature.properties;
+			array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
+		});
+
+		var data = google.visualization.arrayToDataTable(array);
+
+		var view = new google.visualization.DataView(data);
+
+		view.setColumns([0, 1, { calc: "stringify", sourceColumn: 1, type: "string", role: "annotation" }, 2]);
+		
+		return view;
+  	  }
   
 	  function makeHistData(){
 	  
@@ -358,7 +360,7 @@
 		  chartExponential = new google.visualization.ScatterChart(document.getElementById('chartExponential'));
 		  bubble = new google.visualization.BubbleChart(document.getElementById('series_chart_div'));
 		  steppedArea = new google.visualization.SteppedAreaChart(document.getElementById('stepchart_div'));
-		  columnChart = new google.visualization.ColumnChart(document.getElementById('column_values'));
+		  columnChart = new google.visualization.ColumnChart(document.getElementById('columnchart_values'));
 	  }
 	</script>
 
@@ -665,6 +667,12 @@
 								hAxis: {title: 'County'},
           						isStacked: true
         					   };
+			var col_options = {title: "COVID-19 Column Chart, in Per Capita Rate (100,000 persons)",
+						   chartArea:{left:0, top:0},
+						   explorer:{},
+						   bar: {groupWidth: "95%"},
+						   legend: { position: "none" },
+      					  };
 			//chartLinear.draw(makeTrendData(), trend_options);
 			trend_options.trendlines[0].type = 'exponential';
 			trend_options.colors = ['#6F9654'];
@@ -674,7 +682,7 @@
 			line.draw(makeLineData(), line_options);
 			bubble.draw(makeBubbleData(), bubble_options);
 			steppedArea.draw(makeStepData(), step_options);
-			columnChart.draw(makeColData());
+			columnChart.draw(makeColData(), col_options);
 		}
 
 		//state onEachFeature
