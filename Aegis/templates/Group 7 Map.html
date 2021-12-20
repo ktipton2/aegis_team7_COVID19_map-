@@ -198,6 +198,7 @@
   
 	  var barChart, histogram, line, chartLinear, chartExponential, bubble, steppedArea, columnChart
 	  
+	  
 	  function makeData(){
 	  
 		  array = []
@@ -213,7 +214,7 @@
 		  array.unshift(["County", "Per Capita Rate", { role: "style" }]);
   
 		  fin_array = []
-		  for (let i=0; i < 11; i++){
+		  for (let i=0; i < 4; i++){
 			  fin_array.push(array[i]);
 		  }
   
@@ -223,22 +224,26 @@
 		  
 		  return view;
 	  }
-		
+	  	  
 	  function makeColData(){
 	  
-		array = [["County", "Per Capita Rate", { role: "style" }]]
+		col_array = [["County", "Per Capita Rate", { role: "style" }]]
 		geojson2.eachLayer(function(layer){
 			prop = layer.feature.properties;
-			array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
+			col_array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
 		});
 
-		var data = google.visualization.arrayToDataTable(array);
+		var col_data = google.visualization.arrayToDataTable(col_array);
 
-		var view = new google.visualization.DataView(data);
+		var col_view = new google.visualization.DataView(col_data);
 
-		view.setColumns([0, 1, { calc: "stringify", sourceColumn: 1, type: "string", role: "annotation" }, 2]);
+		col_view.setColumns([0, 1, { calc: "stringify",
+								  sourceColumn: 1,
+							      type: "string",
+							      role: "annotation"},
+						    2, {role: "style"}]);
 		
-		return view;
+		return col_view;
   	  }
   
 	  function makeHistData(){
@@ -271,7 +276,7 @@
 		  array.unshift(["County", "Per Capita Rate", "Population", { role: "style"}]);
   
 		  line_array = []
-		  for (let i=0; i < 11; i++){
+		  for (let i=0; i < 4; i++){
 			  line_array.push(array[i]);
 		  }
   
@@ -312,7 +317,7 @@
 		  array.unshift([{id: 'County', type: 'string', role:'domain'}, {id: 'Per Capita Rate', type: 'number'}, {id: 'County FIPS', type: 'number', role:'style'}, {id: 'Population', type: 'number'}]);
   
 		  bub_array = []
-		  for (let i=0; i < 6; i++){
+		  for (let i=0; i < 4; i++){
 			  bub_array.push(array[i]);
 		  }
   
@@ -338,7 +343,7 @@
 		  array.unshift(["County", "Population", "Per Capita Rate"]);
   
 		  step_array = []
-		  for (let i=0; i < 6; i++){
+		  for (let i=0; i < 4; i++){
 			  step_array.push(array[i]);
 		  }
   
