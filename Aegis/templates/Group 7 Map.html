@@ -63,21 +63,21 @@
                     COVID-19 Statistics
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
-		    		<div id="barchart_values" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div>
-				<div id="chart_div" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div>
-				<div id="chart_line" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div>
-				<!-- <div id="chartLinear" style="margin: 0; padding: 0; width: 50%; height: 50%;"></div> -->
-				<div id="chartExponential" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div>
-				<div id="series_chart_div" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div>
-				<div id="stepchart_div" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div>
-		    		<div id="columnchart_values" style="margin: 0; padding: 0; width: 50%; height: 50%;"></div>
+
 				<section class="sidebar-section-text-info" >
 					<p>This dashboard presents a choropleth map, indicating a rate of new cases over the select  period of time per 100'000. 
 					</p>
 					<p><b>number of new cases / number of days / population *  100000</b></p>
 				</section>
-				<div id="columnchart_values" ></div>
-				<div id="bubblechart_values" ></div>
+		    	<section class="graph"><div id="barchart_values" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div></section>
+				<section class="graph"></section><div id="chart_div" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div></section>
+				<section class="graph"></section><div id="chart_line" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div></section>
+				<!-- <div id="chartLinear" style="margin: 0; padding: 0; width: 50%; height: 50%;"></div> -->
+				<section class="graph"></section><div id="chartExponential" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div></section>
+				<section class="graph"></section><div id="series_chart_div" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div></section>
+				<section class="graph"></section><div id="stepchart_div" style="margin: 0; padding: 0; width: 100%; height: 100%;"></div></section>
+		    	<section class="graph"></section><div id="columnchart_values" style="align-content: center; display: block; margin: 0; padding: 0; width: 100%; height: 100%;"></div></section>
+				
 				<section class="sidebar-section-text-info">
 					<p>Counties with missing data will render as green</p>
 				</section>
@@ -673,8 +673,9 @@
           						isStacked: true
         					   };
 			var col_options = {title: "COVID-19 Column Chart, in Per Capita Rate (100,000 persons)",
-						   chartArea:{left:0, top:0},
-						   bar: {groupWidth: "95%"},
+						   
+						   explorer:{},
+						   bar: {groupWidth: "65%"},
 						   legend: { position: "none" },
       					  };
 			//chartLinear.draw(makeTrendData(), trend_options);
