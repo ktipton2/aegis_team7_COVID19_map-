@@ -213,9 +213,16 @@
   
 		  array.unshift(["County", "Per Capita Rate", { role: "style" }]);
   
-		  fin_array = []
-		  for (let i=0; i < 4; i++){
+		  if (array.length < 11){
+		  	fin_array = []
+		  	for (let i=0; i < 4; i++){
 			  fin_array.push(array[i]);
+		  	}
+		  } else {
+			fin_array = []
+		  	for (let i=0; i < 11; i++){
+			  fin_array.push(array[i]);
+		  	}
 		  }
   
 		  var data = google.visualization.arrayToDataTable(fin_array);
@@ -232,6 +239,20 @@
 			prop = layer.feature.properties;
 			col_array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
 		});
+		  
+		array.unshift(["County", "Per Capita Rate", { role: "style" }]);
+		
+		if (array.length < 11){
+			col_array = []
+			for (let i=0; i < 4; i++){
+			col_array.push(array[i]);
+			}
+		} else {
+			col_array = []
+			for (let i=0; i < 11; i++){
+			col_array.push(array[i]);
+			}
+		}
 
 		var col_data = google.visualization.arrayToDataTable(col_array);
 
@@ -274,10 +295,17 @@
 		  });
   
 		  array.unshift(["County", "Per Capita Rate", "Population", { role: "style"}]);
-  
-		  line_array = []
-		  for (let i=0; i < 4; i++){
+		  
+		  if (array.length < 11){
+		  	line_array = []
+		  	for (let i=0; i < 4; i++){
 			  line_array.push(array[i]);
+		  	}
+		  } else {
+			line_array = []
+		  	for (let i=0; i < 11; i++){
+			  line_array.push(array[i]);
+		  	}
 		  }
   
 		  var line_data = google.visualization.arrayToDataTable(line_array);
@@ -316,9 +344,16 @@
   
 		  array.unshift([{id: 'County', type: 'string', role:'domain'}, {id: 'Per Capita Rate', type: 'number'}, {id: 'County FIPS', type: 'number', role:'style'}, {id: 'Population', type: 'number'}]);
   
-		  bub_array = []
-		  for (let i=0; i < 4; i++){
+		  if (array.length < 11){
+		  	bub_array = []
+		  	for (let i=0; i < 4; i++){
 			  bub_array.push(array[i]);
+		  	}
+		  } else {
+			bub_array = []
+		  	for (let i=0; i < 11; i++){
+			  bub_array.push(array[i]);
+		  	}
 		  }
   
 		  var bub_data = google.visualization.arrayToDataTable(bub_array);
@@ -342,9 +377,16 @@
   
 		  array.unshift(["County", "Population", "Per Capita Rate"]);
   
-		  step_array = []
-		  for (let i=0; i < 4; i++){
+		  if (array.length < 11){
+		  	step_array = []
+		  	for (let i=0; i < 4; i++){
 			  step_array.push(array[i]);
+		  	}
+		  } else {
+			step_array = []
+		  	for (let i=0; i < 11; i++){
+			  step_array.push(array[i]);
+		  	}
 		  }
   
 		  var step_data = google.visualization.arrayToDataTable(step_array);
@@ -673,8 +715,8 @@
           						isStacked: true
         					   };
 			var col_options = {title: "COVID-19 Column Chart, in Per Capita Rate (100,000 persons)",
-						   
-						   explorer:{},
+							   vAxis: {title: 'Per Capita Rate'},
+							   hAxis: {title: 'County'},
 						   bar: {groupWidth: "65%"},
 						   legend: { position: "none" },
       					  };
