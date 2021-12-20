@@ -42,7 +42,7 @@
 <body>
 	<!-- Side bar -->
 	<div id="sidebar" class="sidebar collapsed">
-        <!-- Nav tabs -->
+        <!-- Side Bar Nav tabs -->
         <div class="sidebar-tabs">
             <ul role="tablist">
 				<li data-toggle="tooltip" data-placement="right" title="Charts display information about Top 5 Counties in current State with highest values of filtered information"><a href="#home" role="tab"><i class="fa fa-bar-chart" aria-hidden="true"></i></a></li>
@@ -50,12 +50,11 @@
                 <li data-toggle="tooltip" data-placement="right" title="Contact us about COVID-19"><a href="https://covid19.umbc.edu/contact-us/" role="tab"><i class="fa fa-envelope"></i></a></li>
                 <li data-toggle="tooltip" data-placement="right" title="COVID-19 Dashboard GitHub Project"><a href="https://github.com/ktipton2/aegis_team7_COVID19_map-" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
 			</ul>
-
             <ul role="tablist">
                 <li data-placement="right" title="Settings"><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
             </ul>
         </div>
-
+		
         <!-- Tab panes -->
         <div class="sidebar-content">
 			<!-- COVID-19 Statistics -->
@@ -81,39 +80,29 @@
 				<section class="sidebar-section-text">
 					<p>This dashboard provides timely data about the prevalence of COVID-19 within our country on a state level.
 						Testing data includes: COVID-19 case, vaccination, and death rates provided by the CDC Data API and NYTimes API. </p>
-				
 						<p><u>CDC API of COVID-19 Vaccinations in the United States, County​</u></p>
-
 						<p>API that contains the vaccinations data of all counties.</p>
-						
 						<a href="https://data.cdc.gov/resource/8xkx-amqh.json" role="link"><i>https://data.cdc.gov/resource/8xkx-amqh.json</i></a>
-						
+						<p></p>
 						<u>New York Times Coronavirus (Covid-19) Data in the United States on GitHub​</u>
-						
 						<p>GitHub repo containing bot information as well as .csv files by state, by county for use as a dataset ; Live data versions updated several times each day​.</p>
-						
 						<a href="https://github.com/nytimes/covid-19-data" role="link"><i>https://github.com/nytimes/covid-19-data</i></a> 
-						
+						<p></p>
 						<u>State geoJSON </u>
-						
 						<p>Code that adds custom overlays for states using D3 to render the GeoJSON shapes in conjunction with Leaflet.</p>
-						
 						<a href="https://bost.ocks.org/mike/leaflet/" role="link"><i>https://bost.ocks.org/mike/leaflet/</i></a>
-						
+						<p></p>
 						<u>County geoJSON </u>
-						
 						<p>A dataset containing the GeoJSON shapes for US counties, as well as population data. This dataset is very large, our application uses a reduced precision version of the geoJSON, created using  mapshaper.</p> 
-						
 						<a href="https://hub.arcgis.com/datasets/esri::usa-counties/about" role="link"><i>https://hub.arcgis.com/datasets/esri::usa-counties/about</i></a>
-						
+						<p></p>
 						<a href="https://mapshaper.org/" role="link"><i>https://mapshaper.org/</i></a>
-				
 					</section>
 				<section class="sidebar-section-text">
 					<p>UMBC’s is actively responding to positive cases, sick community members, and those exposed to someone with COVID-19.
 						If you test positive for COVID-19, please complete a case report form immediately to receive resources and support.
 					</p>
-					<p>If you believe you have been exposed to COVID-19, please review the information on this page.</p>
+					<p>If you believe you have been exposed to COVID-19, please contact us through this <a href="https://covid19.umbc.edu/contact-us/" role="link"><i>link</i></a>.</p>
 				</section>			
 			</div>
 			<!-- Settings -->
@@ -129,13 +118,11 @@
 		<a href="https://www.umbc.edu/" class="h1-page-name" role="link"><i><img src="{{ url_for('static', filename='doc/UMBC_Logo.png') }}" class="logo-img"></i>COVID-19 Dashboard</a>
 		<!--hide password-->
 		<input type="text" id="password" placeholder=" Admin Password" />
-		
 	</nav>
 
-	<!-- The Navbar -->
+	<!-- Bottom Navbar -->
 	<nav class="navbar navbar-dark justify-content-between" style="background-color: white;">
 		<form class="form-inline">
-		
 			<!-- navbar table select -->
 			<select id="mySelect" class="form-select" onchange="setTable();">
 				<option value="Vaccination" >Vaccinations</option>
@@ -144,28 +131,24 @@
 			</select>
 		</form>
 		<form class="form-inline">
-		
 			<!-- navbar search bar -->
 			<input autocomplete="off" id="autoComplete">
-			
 		</form>
 		<form action="/" class="form-inline">
-			<!-- navbar date select -->
+			<!-- navbar start date select -->
 			<label for="dateStart">
 				Start Date:&nbsp;
 				<input class="form-control" onchange="setDate()" type="date" id="dateStart" name="chosenDateStart" value="{{defaultDateStart}}" min="{{minStartDate}}" max="{{maxStartDate}}">
 			</label>
 		</form>
 		<form action="/" class="form-inline">
-			<!-- navbar date select -->
+			<!-- navbar end date select -->
 			<label for="dateEnd">
 				End Date:&nbsp;
 				<input class="form-control" onchange="setDate()" type="date" id="dateEnd" name="chosenDateEnd" value="{{defaultDateEnd}}" min="{{minEndDate}}" max="{{maxEndDate}}">
 			</label>
-			
 		</form>
 		<form class="form-inline">
-
 			<!-- Update the database -->
 			<button type="button" class="btn-update" onclick="updateDatabase()" id="button" disabled="disabled">Update the database</button>
 			<script>
@@ -186,8 +169,6 @@
 						success: {}
 					});
 				}
-
-
 			</script>
 		</form>
 	</nav>
@@ -203,7 +184,7 @@
 	<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='leaflet-sidebar.js') }}"></script>
 
-	<!-- Chart Script -->
+	<!-- Charts Script -->
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   	<script type="text/javascript">
   
@@ -234,7 +215,7 @@
 	}
   </script>
 
-	<!-- main javascript -->
+	<!-- main map javascript -->
 	<script type="text/javascript">
 		
 		// search bar
