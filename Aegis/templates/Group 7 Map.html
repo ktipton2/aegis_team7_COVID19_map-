@@ -239,20 +239,6 @@
 			prop = layer.feature.properties;
 			col_array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
 		});
-		  
-		array.unshift(["County", "Per Capita Rate", { role: "style" }]);
-		
-		if (array.length < 11){
-			col_array = []
-			for (let i=0; i < 4; i++){
-			col_array.push(array[i]);
-			}
-		} else {
-			col_array = []
-			for (let i=0; i < 11; i++){
-			col_array.push(array[i]);
-			}
-		}
 
 		var col_data = google.visualization.arrayToDataTable(col_array);
 
@@ -715,8 +701,6 @@
           						isStacked: true
         					   };
 			var col_options = {title: "COVID-19 Column Chart, in Per Capita Rate (100,000 persons)",
-							   vAxis: {title: 'Per Capita Rate'},
-							   hAxis: {title: 'County'},
 						   bar: {groupWidth: "65%"},
 						   legend: { position: "none" },
       					  };
