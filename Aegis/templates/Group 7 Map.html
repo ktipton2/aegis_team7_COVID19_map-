@@ -63,6 +63,13 @@
                     COVID-19 Statistics
                     <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
                 </h1>
+		    		<div id="barchart_values" style="margin: 0; padding: 0; width: 50%; height: 50%;"></div>
+				<div id="chart_div" style="margin: 0; padding: 0; width: 50%; height: 50%;"></div>
+				<div id="chart_line" style="margin: 0; padding: 0; width: 50%; height: 50%;"></div>
+				<!-- <div id="chartLinear" style="margin: 0; padding: 0; width: 50%; height: 50%;"></div> -->
+				<div id="chartExponential" style="margin: 0; padding: 0; width: 50%; height: 50%;"></div>
+				<div id="series_chart_div" style="margin: 0; padding: 0; width: 50%; height: 50%;"></div>
+				<div id="stepchart_div" style="margin: 0; padding: 0; width: 50%; height: 50%;"></div>
 				<section class="sidebar-section-text-info" >
 					<p>This dashboard presents a choropleth map, indicating a rate of new cases over the select  period of time per 100'000. 
 					</p>
@@ -186,34 +193,157 @@
 
 	<!-- Charts Script -->
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  	<script type="text/javascript">
+	<script type="text/javascript">
   
-	var columnChart
-    var bubbleChart
-	
-	function makeData(){
-	
-		array = [["Name", "Rate", { role: "style" } ]]
-		geojson2.eachLayer(function(layer){
-			prop = layer.feature.properties;
-			array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
-		});	
-		
-		var data = google.visualization.arrayToDataTable(array);
-
-		var view = new google.visualization.DataView(data);
-		
-		return view;
-	}
+	  var barChart, histogram, line, chartLinear, chartExponential, bubble, steppedArea
+	  
+	  function makeData(){
+	  
+		  array = []
+		  geojson2.eachLayer(function(layer){
+			  prop = layer.feature.properties;
+			  array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
+		  });
   
-    google.charts.load("current", {packages:['corechart']});
-    google.charts.setOnLoadCallback(initializeCharts);
-	
-	function initializeCharts() {
-		bubbleChart = new google.visualization.PieChart(document.getElementById('bubblechart_values'));
-		columnChart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-	}
-  </script>
+		  array.sort(function(a, b){
+			  return b[1] - a[1]
+		  });
+  
+		  array.unshift(["County", "Per Capita Rate", { role: "style" }]);
+  
+		  fin_array = []
+		  for (let i=0; i < 11; i++){
+			  fin_array.push(array[i]);
+		  }
+  
+		  var data = google.visualization.arrayToDataTable(fin_array);
+  
+		  var view = new google.visualization.DataView(data);
+		  
+		  return view;
+	  }
+  
+	  function makeHistData(){
+	  
+		  hist_array = [["County", "Per Capita Rate", { role: "style" }]]
+		  geojson2.eachLayer(function(layer){
+			  prop = layer.feature.properties;
+			  hist_array.push([prop.NAME, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
+		  });
+  
+		  var hist_data = google.visualization.arrayToDataTable(hist_array);
+  
+		  var hist_view = new google.visualization.DataView(hist_data);
+		  
+		  return hist_view;
+	  }
+  
+	  function makeLineData(){
+	  
+		  array = []
+		  geojson2.eachLayer(function(layer){
+			  prop = layer.feature.properties;
+			  array.push([prop.NAME, GlobalData[prop.FIPS], prop.POPULATION, getColor(GlobalData[prop.FIPS])])
+		  });	
+		  
+		  array.sort(function(a, b){
+			  return b[1] - a[1]
+		  });
+  
+		  array.unshift(["County", "Per Capita Rate", "Population", { role: "style"}]);
+  
+		  line_array = []
+		  for (let i=0; i < 11; i++){
+			  line_array.push(array[i]);
+		  }
+  
+		  var line_data = google.visualization.arrayToDataTable(line_array);
+  
+		  var line_view = new google.visualization.DataView(line_data);
+		  
+		  return line_view;
+	  }
+  
+	  function makeTrendData(){
+  
+		  trend_array = [["Population", "Per Capita Rate", { role: "style" }]]
+		  geojson2.eachLayer(function(layer){
+			  prop = layer.feature.properties;
+			  trend_array.push([prop.POPULATION, GlobalData[prop.FIPS], getColor(GlobalData[prop.FIPS])])
+		  });	
+		  
+		  var trend_data = google.visualization.arrayToDataTable(trend_array);
+  
+		  var trend_view = new google.visualization.DataView(trend_data);
+		  
+		  return trend_view;
+	  }
+  
+	  function makeBubbleData(){
+  
+		  array = []
+		  geojson2.eachLayer(function(layer){
+			  prop = layer.feature.properties;
+			  array.push([prop.NAME, GlobalData[prop.FIPS], prop.CNTY_FIPS, prop.POPULATION])
+		  });	
+		  
+		  array.sort(function(a, b){
+			  return b[1] - a[1]
+		  });
+  
+		  array.unshift([{id: 'County', type: 'string', role:'domain'}, {id: 'Per Capita Rate', type: 'number'}, {id: 'County FIPS', type: 'number', role:'style'}, {id: 'Population', type: 'number'}]);
+  
+		  bub_array = []
+		  for (let i=0; i < 6; i++){
+			  bub_array.push(array[i]);
+		  }
+  
+		  var bub_data = google.visualization.arrayToDataTable(bub_array);
+  
+		  var bub_view = new google.visualization.DataView(bub_data);
+		  
+		  return bub_view;
+	  }
+  
+	  function makeStepData(){
+	  
+		  array = []
+		  geojson2.eachLayer(function(layer){
+		  prop = layer.feature.properties;
+		  array.push([prop.NAME, prop.POPULATION, GlobalData[prop.FIPS]])
+		  });
+  
+			  array.sort(function(a, b){
+			  return b[1] - a[1]
+		  });
+  
+		  array.unshift(["County", "Population", "Per Capita Rate"]);
+  
+		  step_array = []
+		  for (let i=0; i < 6; i++){
+			  step_array.push(array[i]);
+		  }
+  
+		  var step_data = google.visualization.arrayToDataTable(step_array);
+  
+		  var step_view = new google.visualization.DataView(step_data);
+		  
+		  return step_view;
+	  }
+  
+	  google.charts.load("current", {packages:['corechart', 'bar', 'line']});
+	  google.charts.setOnLoadCallback(initializeCharts);
+	  
+	  function initializeCharts() {
+		  barChart = new google.visualization.BarChart(document.getElementById('barchart_values'));
+		  histogram = new google.visualization.Histogram(document.getElementById('chart_div'));
+		  line = new google.visualization.LineChart(document.getElementById('chart_line'));
+		  //chartLinear = new google.visualization.ScatterChart(document.getElementById('chartLinear'));
+		  chartExponential = new google.visualization.ScatterChart(document.getElementById('chartExponential'));
+		  bubble = new google.visualization.BubbleChart(document.getElementById('series_chart_div'));
+		  steppedArea = new google.visualization.SteppedAreaChart(document.getElementById('stepchart_div'));
+	  }
+	</script>
 
 	<!-- main map javascript -->
 	<script type="text/javascript">
@@ -473,8 +603,60 @@
 					}).addTo(map);
 				}
 			});
-			columnChart.draw(makeData());
-			bubbleChart.draw(makeData());
+			
+			// Update Google Charts for sidebar
+			// Include new chart types here
+			var bar_options = {title:"COVID-19 Bar Chart, in Per Capita Rate (100,000 persons)",
+							   bar: {groupWidth: "65%"},
+							   legend: {position: "none"},
+							   hAxis: {title:"Per Capita Rate"},
+							   vAxis: {title:"County"},
+							   };
+			var hist_options = {title: "COVID-19 Histogram, in Per Capita Rate (100,000 persons)",
+          				   		legend: { position: 'none' },
+							    hAxis: {title:"Per Capita Rate"},
+								vAxis: {title:"Number of Counties"},
+        				  };
+			var line_options = {title: "COVID-19 Line Chart, in Per Capita Rate (100,000 persons)",
+								hAxis: {title: 'Per Capita Rate'},
+								vAxis: {title: 'Population'},
+								colors: ['#a52714', '#097138'],
+								crosshair: {
+								color: '#000',
+								//trigger: 'selection'
+								}
+							};
+			var trend_options = {title: "COVID-19 Trend Chart, in Per Capita Rate (100,000 persons)",
+								 hAxis: {title: 'Population', minValue: 0, maxValue: 15},
+								 vAxis: {title: 'Per Capita Rate', minValue: 0, maxValue: 15},
+								 chartArea: {width:'50%'},
+								 trendlines: {0: {
+							 				  type: 'linear',
+					         				  showR2: true,
+					         			      visibleInLegend: true
+											  }}
+								};
+			var bubble_options = {title: 'COVID-19 Bubblecart, in Per Capita Rate (100,000 persons)' +
+                                                     ' X=Per Capita Rate, Y=Population, Bubble size=Population, Bubble color=County',
+        						  hAxis: {title: 'Population'},
+        						  vAxis: {title: 'Per Capita Rate'},
+        						  bubble: {textStyle: {fontSize: 11}}
+      							 };
+
+			var step_options = {title: "COVID-19 Step Chart, in Per Capita Rate (100,000 persons)",
+          						vAxis: {title: 'Per Capita Rate'},
+								hAxis: {title: 'County'},
+          						isStacked: true
+        					   };
+			//chartLinear.draw(makeTrendData(), trend_options);
+			trend_options.trendlines[0].type = 'exponential';
+			trend_options.colors = ['#6F9654'];
+			chartExponential.draw(makeTrendData(), trend_options);
+			barChart.draw(makeData(), bar_options);
+			histogram.draw(makeHistData(), hist_options);
+			line.draw(makeLineData(), line_options);
+			bubble.draw(makeBubbleData(), bubble_options);
+			steppedArea.draw(makeStepData(), step_options);
 		}
 
 		//state onEachFeature
