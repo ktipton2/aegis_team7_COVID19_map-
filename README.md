@@ -4,12 +4,18 @@
 Team roster: Kyle Tipton, Kelly Snyder, Pierce Jackson, ​
 Ryan Orndoff, Johnathan Brown, Amy Phan
 
+## Introduction:
+Our product is a web-based map dashboard that will show the statistics of COVID-19 infections, vaccination, and death rates at a county level in the United States. Our software should show a map that will allow the user to choose a particular county that will show COVID-19 relevant data based on their choice of date and data type. Additionally, the dashboard will also show data graphs (bar graph).  
+
 ## About The Project
 
 <i>You can use a windows or mac device for this application. </i>
 
 **Languages and Tools:**
-<p> <a href="https://getbootstrap.com" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg" alt="bootstrap" width="40" height="40"/> </a> <a href="https://www.w3schools.com/css/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a> <a href="https://flask.palletsprojects.com/" target="_blank"> <img src="https://d2knvm16wkt3ia.cloudfront.net/assets/svg-icon/flask.svg" alt="flask" width="40" height="40"/> </a><a href="https://www.sqlite.org/index.html" target="_blank"> <img src="https://user-images.githubusercontent.com/33158051/103467186-7b6a8900-4d1a-11eb-9907-491064bc8458.png" alt="mysql" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a></p>
+<p> <a href="https://getbootstrap.com" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-plain-wordmark.svg" alt="bootstrap" width="40" height="40"/> </a> <a href="https://www.w3schools.com/css/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/> </a> <a href="https://www.w3.org/html/" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a> <a href="https://flask.palletsprojects.com/" target="_blank"> <img src="https://d2knvm16wkt3ia.cloudfront.net/assets/svg-icon/flask.svg" alt="flask" width="40" height="40"/> </a><a href="https://www.sqlite.org/index.html" target="_blank"> <img src="https://user-images.githubusercontent.com/33158051/103467186-7b6a8900-4d1a-11eb-9907-491064bc8458.png" alt="sqlite" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a></p>
+
+(HTML5/CSS3/Bootstrap/Flask/sqlite/Python)
+
 
 **Extensions:**
 - flask
@@ -44,26 +50,45 @@ https://hub.arcgis.com/datasets/esri::usa-counties/about
 
 https://mapshaper.org/ 
 
-## To set up venv
+## Installation:
+
+Go to our GitHub page and export our project files (clone/downloading the zip) into a workspace folder: 
+
+https://github.com/ktipton2/aegis_team7_COVID19_map-  
+ 
+Through terminal (or VSCode’s terminal), move into the workspace folder. From there, you can do the following steps to install the virtual environment and the rest of the dependents. From there you should be able to run the site: 
 
 **Windows:**
 
-in the root folder (the one this file is in) run: 
+1. Install python 3.6, which should come with pip. Follow the installation instructions and check if it’s correctly installed by typing: 
 ```
-py -m venv venv
+py –version 
+```
+2. Install and set up a virtualenv: 
+```
+sudo py –m pip install virtualenv 
+mkdir <project name> 
+cd<project name> 
+py –m venv venv 
+Call venv\Scripts\activate
 ```
 
-to activate your venv: 
+3. Install the extensions 
 ```
-venv\Scripts\activate
+py -m pip install flask 
+py -m pip install flask-sqlalchemy 
+py -m pip install requests 
 ```
-make sure to pip install: 
-python -m pip install 
+
+4. Once you’ve installed these dependents, create a flask command that will be used to specify how to load the application (assuming you’re using bash, otherwise check out the flask site): 
 ```
-flask
-flask-sqlalchemy 
-requests
+// activate the python environment 
+$ set FLASK_APP=run.py 
+$ flask run 
 ```
+(Make sure you’re within the aegis_team7_COVID19_map- folder) 
+
+5. You should be able to run and open the application now. 
 
 **Mac:**
 
@@ -94,11 +119,13 @@ python -m pip install flask
 python -m pip install flask-sqlalchemy
 python -m pip install requests
 ```
-4. Once you've installed these extensions, create a flask command that will be used to specify how to load the application <i>(assuming you're using bash, otherwise check out the [flask site](https://flask.palletsprojects.com/en/2.0.x/cli/)</i>:
+4. Once you've installed these dependents, create a flask command that will be used to specify how to load the application <i>(assuming you're using bash, otherwise check out the [flask site](https://flask.palletsprojects.com/en/2.0.x/cli/)</i>:
 ```
 $ export FLASK_APP=run
 $ flask run
 ```
+(Make sure you’re within the aegis_team7_COVID19_map- folder)
+
 5. You should be able to run and open the application now.
 
 
